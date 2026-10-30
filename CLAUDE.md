@@ -34,3 +34,10 @@ Backend is a separate Flask repo on Render. Do not touch API calls unless told t
 ## Logo files
 - In the CRM app: rise-crm-lockup-for-dark.png on dark surfaces, rise-crm-lockup.png on light surfaces, rise-crm-mark.png for small spots like the sidebar.
 - Landing page only: runonrise-lockup-for-dark.png and runonrise-lockup-for-light.png, runonrise-mark.png for the hero reflection.
+
+## Landing page rules
+- Landing code lives in src/landing/. Styles go in src/landing/landing.css.
+- Scope every landing style and token under .rise-landing. Never add landing tokens to :root or to src/App.css.
+- Runonrise logos are allowed on the landing page only. The CRM keeps using only the R.I.S.E CRM logo.
+- Landing work must not modify the CRM: no changes to src/App.js, src/App.css, src/pages, src/components, or the CRM's behavior.
+- Link to the CRM with a plain <a href="/app">, not a router Link, so CRM styles never load on the landing page.
