@@ -113,7 +113,7 @@ export default function Automations() {
                 onClick={() => handleToggle(rule.id)}
                 style={{
                   width: 40, height: 22, borderRadius: 11, border: "none",
-                  background: rule.active ? "var(--green)" : "var(--border2)",
+                  background: rule.active ? "var(--cyan)" : "var(--border2)",
                   position: "relative", cursor: "pointer", flexShrink: 0,
                   transition: "background 0.2s"
                 }}
@@ -137,7 +137,7 @@ export default function Automations() {
                   {/* WHEN badge */}
                   <span style={{
                     padding: "3px 8px", borderRadius: 4, fontSize: 10, fontWeight: 700,
-                    background: "color-mix(in srgb, var(--amber) 15%, transparent)", color: "var(--amber)",
+                    background: "color-mix(in srgb, var(--amber) 15%, transparent)", color: "color-mix(in srgb, var(--amber) 75%, var(--text))",
                     letterSpacing: 0.5, textTransform: "uppercase"
                   }}>
                     WHEN
@@ -159,7 +159,7 @@ export default function Automations() {
                   {/* THEN badge */}
                   <span style={{
                     padding: "3px 8px", borderRadius: 4, fontSize: 10, fontWeight: 700,
-                    background: "color-mix(in srgb, var(--cyan) 15%, transparent)", color: "var(--cyan)",
+                    background: "color-mix(in srgb, var(--cyan) 15%, transparent)", color: "var(--brand-bright)",
                     letterSpacing: 0.5, textTransform: "uppercase"
                   }}>
                     THEN
