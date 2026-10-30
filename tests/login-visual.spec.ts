@@ -31,7 +31,7 @@ for (const theme of THEMES) {
       // Keep the shots stable and offline: no backend calls.
       await page.route('**/api/**', (route) => route.abort());
 
-      await page.goto(BASE_URL + '/');
+      await page.goto(BASE_URL + '/app');
       await expect(page.getByRole('button', { name: 'Sign in' })).toBeVisible();
 
       // Wait for the logo images to finish loading before shooting.

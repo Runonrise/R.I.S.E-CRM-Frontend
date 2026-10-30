@@ -94,7 +94,7 @@ async function open(page: Page, viewport: { width: number; height: number }, the
       await route.fulfill({ response: res, json: body });
     });
   }
-  await page.goto(APP_URL + '/');
+  await page.goto(APP_URL + '/app');
   await page.waitForSelector('main');
 }
 
