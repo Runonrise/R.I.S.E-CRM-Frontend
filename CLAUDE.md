@@ -4,9 +4,8 @@ React app with Framer Motion and Recharts. Check package.json for the exact setu
 Backend is a separate Flask repo on Render. Do not touch API calls unless told to.
 
 ## Git rules
-- Commit locally only. NEVER run git push. Push is disabled on purpose.
-- Branches: thematic-overhaul, professional-website. Commit small and often.
-- Deploying to Vercel happens last, and only when I say so.
+- Commit often. Push only branches named in this file, never main.
+- Never push to main. Deploying to Vercel happens last, and only when I say so.
 
 ## Brand
 - Product name: R.I.S.E CRM (formerly RetainIQ). Never show "RetainIQ" in the UI.
