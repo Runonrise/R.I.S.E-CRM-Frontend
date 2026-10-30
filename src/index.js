@@ -7,7 +7,27 @@ import reportWebVitals from './reportWebVitals';
 
 // Each route is its own chunk, so App.css (imported by App.js) only loads on
 // /app and landing.css only loads on "/".
-const LandingPage = lazy(() => import('./landing/LandingPage'));
+// The landing page waits for its web fonts (at most 2s) before it renders,
+// so text does not rewrap and push the page around when the fonts arrive.
+function loadLandingFonts() {
+  try {
+    const fonts = [
+      '400 16px Inter',
+      '500 16px Inter',
+      '600 16px Inter',
+      '600 16px "Space Grotesk"',
+      '700 16px "Space Grotesk"',
+    ].map((f) => document.fonts.load(f));
+    const timeout = new Promise((resolve) => setTimeout(resolve, 2000));
+    return Promise.race([Promise.all(fonts), timeout]).catch(() => {});
+  } catch (e) {
+    return Promise.resolve();
+  }
+}
+
+const LandingPage = lazy(() =>
+  Promise.all([import('./landing/LandingPage'), loadLandingFonts()]).then(([mod]) => mod)
+);
 const App = lazy(() => import('./App'));
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
