@@ -81,12 +81,12 @@ export default function ActivityTimeline({ activities = [], maxItems = 10 }) {
               fontWeight: 500,
               border:
                 activeFilter === f.key
-                  ? "1px solid var(--brand-bright)"
+                  ? "1px solid var(--brand-fill)"
                   : "1px solid var(--border2)",
               borderRadius: "999px",
               background:
-                activeFilter === f.key ? "var(--brand-bright)" : "transparent",
-              color: activeFilter === f.key ? "#fff" : "var(--text2)",
+                activeFilter === f.key ? "var(--brand-fill)" : "transparent",
+              color: activeFilter === f.key ? "var(--on-brand)" : "var(--text2)",
               cursor: "pointer",
               transition: "all 0.15s ease",
             }}

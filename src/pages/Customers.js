@@ -18,16 +18,16 @@ const fmtDate = (s) => {
 };
 
 const STATUS = {
-  Expired:   { bg: "#f3dada", fg: "#a83838", label: "Expired" },
-  Critical:  { bg: "#f3dada", fg: "#a83838", label: "Critical" },
-  "At-Risk": { bg: "#efe4c4", fg: "#7d6217", label: "At-risk" },
-  Active:    { bg: "#d7e9e1", fg: "#1b6a58", label: "Active" },
+  Expired:   { bg: "color-mix(in srgb, var(--red) 10%, var(--card))", fg: "var(--red)", label: "Expired" },
+  Critical:  { bg: "color-mix(in srgb, var(--red) 10%, var(--card))", fg: "var(--red)", label: "Critical" },
+  "At-Risk": { bg: "color-mix(in srgb, var(--amber) 10%, var(--card))", fg: "var(--amber)", label: "At-risk" },
+  Active:    { bg: "color-mix(in srgb, var(--green) 10%, var(--card))", fg: "var(--green)", label: "Active" },
 };
 const statusOf = (s) => STATUS[s] || STATUS.Active;
 
 const QUOTE_STATUS = {
-  sent:  { bg: "#d7e9e1", fg: "#1b6a58", t: "Sent" },
-  draft: { bg: "#efe4c4", fg: "#7d6217", t: "Draft" },
+  sent:  { bg: "color-mix(in srgb, var(--green) 10%, var(--card))", fg: "var(--green)", t: "Sent" },
+  draft: { bg: "color-mix(in srgb, var(--amber) 10%, var(--card))", fg: "var(--amber)", t: "Draft" },
 };
 
 const ctrl = {
@@ -323,7 +323,7 @@ export default function Clients({ API, pageAction, clearAction, isGuest }) {
       </label>
       <div style={{ display: "flex", gap: 8 }}>
         <button onClick={saveContact} disabled={contactSaving}
-          style={{ flex: 1, padding: "8px", borderRadius: 8, border: "none", background: "var(--cyan)", color: "#fff", fontFamily: "Inter", fontSize: 13, fontWeight: 600, cursor: "pointer", opacity: contactSaving ? 0.7 : 1 }}>
+          style={{ flex: 1, padding: "8px", borderRadius: 8, border: "none", background: "var(--brand-fill)", color: "var(--on-brand)", fontFamily: "Inter", fontSize: 13, fontWeight: 600, cursor: "pointer", opacity: contactSaving ? 0.7 : 1 }}>
           {contactSaving ? "Saving…" : (contactForm && contactForm.id ? "Save" : "Add contact")}
         </button>
         <button onClick={() => setContactForm(null)}
@@ -386,7 +386,7 @@ export default function Clients({ API, pageAction, clearAction, isGuest }) {
                   )}
                   <div style={{ display: "flex", gap: 8 }}>
                     <button onClick={saveLog} disabled={logSaving}
-                      style={{ flex: 1, padding: "8px", borderRadius: 8, border: "none", background: "var(--cyan)", color: "#fff", fontFamily: "Inter", fontSize: 13, fontWeight: 600, cursor: "pointer", opacity: logSaving ? 0.7 : 1 }}>
+                      style={{ flex: 1, padding: "8px", borderRadius: 8, border: "none", background: "var(--brand-fill)", color: "var(--on-brand)", fontFamily: "Inter", fontSize: 13, fontWeight: 600, cursor: "pointer", opacity: logSaving ? 0.7 : 1 }}>
                       {logSaving ? "Saving…" : "Save"}
                     </button>
                     <button onClick={() => setLogForm(null)}
@@ -535,7 +535,7 @@ export default function Clients({ API, pageAction, clearAction, isGuest }) {
             {!email && (
               <button onClick={generateEmail} disabled={emailLoading}
                 style={{ width: "100%", padding: "11px 16px", borderRadius: 10, border: "none",
-                  background: "var(--cyan)", color: "#ffffff", fontFamily: "Inter", fontSize: 14, fontWeight: 600,
+                  background: "var(--brand-fill)", color: "var(--on-brand)", fontFamily: "Inter", fontSize: 14, fontWeight: 600,
                   cursor: emailLoading ? "default" : "pointer", opacity: emailLoading ? 0.7 : 1 }}>
                 {emailLoading ? "Drafting…" : "Generate renewal email"}
               </button>
@@ -553,7 +553,7 @@ export default function Clients({ API, pageAction, clearAction, isGuest }) {
                     background: "var(--bg)", color: "var(--text)", fontFamily: "Inter", fontSize: 14, lineHeight: 1.55, outline: "none", resize: "vertical", boxSizing: "border-box" }} />
                 <div style={{ display: "flex", gap: 8, marginTop: 14, flexWrap: "wrap" }}>
                   <button onClick={openInMail}
-                    style={{ flex: "1 1 auto", padding: "10px 14px", borderRadius: 9, border: "none", background: "var(--cyan)", color: "#fff", fontFamily: "Inter", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>Open in email</button>
+                    style={{ flex: "1 1 auto", padding: "10px 14px", borderRadius: 9, border: "none", background: "var(--brand-fill)", color: "var(--on-brand)", fontFamily: "Inter", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>Open in email</button>
                   <button onClick={copyEmail}
                     style={{ padding: "10px 14px", borderRadius: 9, border: "1px solid var(--border2)", background: "transparent", color: "var(--text)", fontFamily: "Inter", fontSize: 14, fontWeight: 500, cursor: "pointer" }}>Copy</button>
                   <button onClick={generateEmail} disabled={emailLoading}

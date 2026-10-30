@@ -44,7 +44,7 @@ export default function TaskList({ tasks = [], onToggle }) {
           onMouseLeave={e => e.currentTarget.style.background = "var(--card)"}>
           <button onClick={() => onToggle && onToggle(task.id)}
             style={{ width: 20, height: 20, borderRadius: 6, border: task.completed ? "none" : `2px solid ${priorityColor(task.priority)}`, background: task.completed ? "var(--green)" : "transparent", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}>
-            {task.completed && <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>}
+            {task.completed && <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--card)" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>}
           </button>
 
           <div style={{ flex: 1, minWidth: 0 }}>

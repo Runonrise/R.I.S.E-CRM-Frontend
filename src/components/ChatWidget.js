@@ -66,9 +66,9 @@ function ActionProposalCard({ msg, onConfirm, onCancel, isGuest }) {
         <div style={{ display: "flex", gap: 8 }}>
           <button
             onClick={() => onConfirm()}
-            style={{ padding: "7px 16px", fontSize: 12, fontWeight: 600, borderRadius: 8, border: "none", background: "var(--cyan)", color: "#fff", cursor: "pointer", fontFamily: "Inter", transition: "background 0.15s" }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = "color-mix(in srgb, var(--cyan) 82%, black)")}
-            onMouseLeave={(e) => (e.currentTarget.style.background = "var(--cyan)")}
+            style={{ padding: "7px 16px", fontSize: 12, fontWeight: 600, borderRadius: 8, border: "none", background: "var(--brand-fill)", color: "var(--on-brand)", cursor: "pointer", fontFamily: "Inter", transition: "background 0.15s" }}
+            onMouseEnter={(e) => (e.currentTarget.style.background = "color-mix(in srgb, var(--brand-fill) 82%, black)")}
+            onMouseLeave={(e) => (e.currentTarget.style.background = "var(--brand-fill)")}
           >
             Confirm
           </button>
@@ -361,8 +361,8 @@ export default function ChatWidget({ API, isGuest }) {
                 onClick={() => sendMessage(input)}
                 disabled={!input.trim() || loading}
                 aria-label="Send"
-                onMouseEnter={(e) => { if (input.trim() && !loading) e.currentTarget.style.background = "color-mix(in srgb, var(--cyan) 82%, black)"; }}
-                onMouseLeave={(e) => { if (input.trim() && !loading) e.currentTarget.style.background = "var(--cyan)"; }}
+                onMouseEnter={(e) => { if (input.trim() && !loading) e.currentTarget.style.background = "color-mix(in srgb, var(--brand-fill) 82%, black)"; }}
+                onMouseLeave={(e) => { if (input.trim() && !loading) e.currentTarget.style.background = "var(--brand-fill)"; }}
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -373,8 +373,8 @@ export default function ChatWidget({ API, isGuest }) {
                   borderRadius: 8,
                   border: "none",
                   transition: "background 0.15s",
-                  background: !input.trim() || loading ? "var(--hover2)" : "var(--cyan)",
-                  color: !input.trim() || loading ? "var(--text3)" : "#fff",
+                  background: !input.trim() || loading ? "var(--hover2)" : "var(--brand-fill)",
+                  color: !input.trim() || loading ? "var(--text3)" : "var(--on-brand)",
                   cursor: !input.trim() || loading ? "default" : "pointer",
                 }}
               >

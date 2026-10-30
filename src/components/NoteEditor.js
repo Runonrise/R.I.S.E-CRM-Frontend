@@ -49,7 +49,7 @@ export default function NoteEditor({ notes = [], entityId, entityType = "client"
               Cancel
             </button>
             <button onClick={handleSave}
-              style={{ padding: "6px 12px", borderRadius: 6, border: "none", background: "var(--cyan)", color: "#fff", fontSize: 12, fontWeight: 500, cursor: "pointer", opacity: newNote.trim() ? 1 : 0.5 }}>
+              style={{ padding: "6px 12px", borderRadius: 6, border: "none", background: "var(--brand-fill)", color: "var(--on-brand)", fontSize: 12, fontWeight: 500, cursor: "pointer", opacity: newNote.trim() ? 1 : 0.5 }}>
               Save note
             </button>
           </div>

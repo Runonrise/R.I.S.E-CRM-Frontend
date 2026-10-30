@@ -96,7 +96,7 @@ export default function Upload({ onUpload, onSkip, API, onCancel }) {
         <AnimatePresence>
           {error && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-              style={{ color: "#e06a6a", fontSize: 12.5, marginTop: 14, textAlign: "center" }}>
+              style={{ color: "var(--danger-soft)", fontSize: 12.5, marginTop: 14, textAlign: "center" }}>
               {error}
             </motion.div>
           )}
@@ -111,7 +111,7 @@ export default function Upload({ onUpload, onSkip, API, onCancel }) {
           </button>
           <motion.button whileHover={{ scale: file && !loading ? 1.02 : 1 }} whileTap={{ scale: file && !loading ? 0.98 : 1 }}
             onClick={handleUpload} disabled={!file || loading}
-            style={{ background: "var(--cyan)", color: "#fff", border: "none", borderRadius: 10, padding: "11px 20px", fontFamily: "Inter", fontSize: 14, fontWeight: 600, cursor: !file || loading ? "default" : "pointer", opacity: !file || loading ? 0.4 : 1 }}>
+            style={{ background: "var(--brand-fill)", color: "var(--on-brand)", border: "none", borderRadius: 10, padding: "11px 20px", fontFamily: "Inter", fontSize: 14, fontWeight: 600, cursor: !file || loading ? "default" : "pointer", opacity: !file || loading ? 0.4 : 1 }}>
             {loading ? "Importing…" : "Import data"}
           </motion.button>
         </div>

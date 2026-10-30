@@ -18,10 +18,10 @@ const fmtDate = (s) => {
 };
 
 const STATUS = {
-  Expired:   { bg: "#f3dada", fg: "#a83838", label: "Expired" },
-  Critical:  { bg: "#f3dada", fg: "#a83838", label: "Critical" },
-  "At-Risk": { bg: "#efe4c4", fg: "#7d6217", label: "At-risk" },
-  Active:    { bg: "#d7e9e1", fg: "#1b6a58", label: "Active" },
+  Expired:   { bg: "color-mix(in srgb, var(--red) 10%, var(--card))", fg: "var(--red)", label: "Expired" },
+  Critical:  { bg: "color-mix(in srgb, var(--red) 10%, var(--card))", fg: "var(--red)", label: "Critical" },
+  "At-Risk": { bg: "color-mix(in srgb, var(--amber) 10%, var(--card))", fg: "var(--amber)", label: "At-risk" },
+  Active:    { bg: "color-mix(in srgb, var(--green) 10%, var(--card))", fg: "var(--green)", label: "Active" },
 };
 
 const th = { textAlign: "left", padding: "13px 16px", color: "var(--text2)", fontWeight: 500, fontSize: 14 };

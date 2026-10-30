@@ -54,7 +54,7 @@ export default function Automations() {
         <button onClick={() => setShowForm(true)} style={{
           display: "flex", alignItems: "center", gap: 6,
           padding: "9px 18px", borderRadius: "var(--radius)", border: "none",
-          background: "var(--cyan)", color: "#fff", fontSize: 13, fontWeight: 600,
+          background: "var(--brand-fill)", color: "var(--on-brand)", fontSize: 13, fontWeight: 600,
           cursor: "pointer", fontFamily: "Inter"
         }}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -120,7 +120,7 @@ export default function Automations() {
               >
                 <span style={{
                   position: "absolute", top: 3, left: rule.active ? 21 : 3,
-                  width: 16, height: 16, borderRadius: "50%", background: "#fff",
+                  width: 16, height: 16, borderRadius: "50%", background: "var(--on-brand)",
                   transition: "left 0.2s", boxShadow: "0 1px 3px rgba(0,0,0,0.3)"
                 }} />
               </button>
@@ -223,7 +223,7 @@ export default function Automations() {
               <button onClick={() => setShowForm(false)}
                 style={{ padding: "9px 18px", borderRadius: 8, border: "1px solid var(--border2)", background: "transparent", color: "var(--text2)", fontSize: 13, fontFamily: "Inter", cursor: "pointer" }}>Cancel</button>
               <button onClick={handleCreateRule}
-                style={{ padding: "9px 18px", borderRadius: 8, border: "none", background: "var(--cyan)", color: "#fff", fontSize: 13, fontWeight: 600, fontFamily: "Inter", cursor: "pointer", opacity: (newRule.name.trim() && newRule.trigger.trim() && newRule.action.trim()) ? 1 : 0.5 }}>Create Rule</button>
+                style={{ padding: "9px 18px", borderRadius: 8, border: "none", background: "var(--brand-fill)", color: "var(--on-brand)", fontSize: 13, fontWeight: 600, fontFamily: "Inter", cursor: "pointer", opacity: (newRule.name.trim() && newRule.trigger.trim() && newRule.action.trim()) ? 1 : 0.5 }}>Create Rule</button>
             </div>
           </div>
         </>

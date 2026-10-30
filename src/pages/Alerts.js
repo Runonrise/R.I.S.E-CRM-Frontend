@@ -117,12 +117,12 @@ export default function Analytics({ API }) {
       const m = months.find(x => x.key === k);
       if (m) m.total += (d.value || 0) * (PROB[d.stage] || 0);
     });
-    const fcShades = ["#3B6D11", "#4d8016", "#639922", "#7DB037", "#97C459", "#b0d36f"];
+    const fcShades = [100, 94, 88, 82, 76, 72].map(p => `color-mix(in srgb, var(--cyan) ${p}%, var(--card))`);
     const hasForecast = months.some(m => m.total > 0);
     const maxMonth = Math.max(1, ...months.map(m => m.total));
 
     const funnel = OPEN_STAGES.map(st => { const ds = open.filter(d => d.stage === st); return { name: st, n: ds.length, value: ds.reduce((s, d) => s + (d.value || 0), 0) }; });
-    const funnelShades = ["var(--cyan)", "#1D9E75", "#3DB390", "#5DCAA5", "var(--brand-bright)"];
+    const funnelShades = [72, 79, 86, 93, 100].map(p => `color-mix(in srgb, var(--cyan) ${p}%, var(--card))`);
 
     // Rescale to the real data range (not a flat 0-100) so the true variation is visible.
     const retentionVals = retention.map(r => r.retention_pct);
@@ -167,14 +167,14 @@ export default function Analytics({ API }) {
   const kpis = [
     { label: "Pipeline value", value: pipelineValue, format: fmtBig, color: "var(--text)" },
     { label: "Weighted forecast", value: weighted, format: fmtBig, color: "var(--brand-bright)" },
-    { label: "Win rate", value: winRate, format: (v) => Math.round(v) + "%", color: "#97C459" },
+    { label: "Win rate", value: winRate, format: (v) => Math.round(v) + "%", color: "var(--green)" },
     { label: "Avg deal size", value: avgDeal, format: fmtBig, color: "var(--text)" },
   ];
 
   const metrics = [
     ["Opportunities created", String(deals.length), "var(--text)"],
-    ["Won deals", String(wonLength), "#97C459"],
-    ["Lost deals", String(lostLength), "#d98c8c"],
+    ["Won deals", String(wonLength), "var(--green)"],
+    ["Lost deals", String(lostLength), "var(--danger-soft)"],
     ["Conversion rate", conv + "%", "var(--text)"],
     ["Avg deal size", fmtBig(avgDeal), "var(--text)"],
   ];

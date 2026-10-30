@@ -5,8 +5,11 @@ import useBreakpoint from "../hooks/useBreakpoint";
 
 const STAGES = ["New Leads", "Qualified", "Demo", "Quote sent", "Negotiation", "Closed-Won", "Closed-Lost"];
 const STAGE_DOT = {
-  "New Leads": "var(--text3)", "Qualified": "#378add", "Demo": "#7F77DD", "Quote sent": "#EF9F27",
-  "Negotiation": "#1D9E75", "Closed-Won": "#639922", "Closed-Lost": "#E24B4A",
+  "New Leads": "var(--text3)",
+  "Qualified": "color-mix(in srgb, var(--cyan) 79%, var(--card))",
+  "Demo": "color-mix(in srgb, var(--cyan) 86%, var(--card))",
+  "Quote sent": "color-mix(in srgb, var(--cyan) 93%, var(--card))",
+  "Negotiation": "var(--cyan)", "Closed-Won": "var(--green)", "Closed-Lost": "var(--red)",
 };
 const SOURCES = ["Inbound", "Outbound", "Referral", "Event", "Other"];
 
@@ -22,9 +25,9 @@ const money = (v) => "$" + Number(v || 0).toLocaleString(undefined, { minimumFra
 
 function health(d) {
   if (d.stage === "Closed-Won" || d.stage === "Closed-Lost") return null;
-  if ((d.days_in_stage || 0) > 14) return { c: "#E24B4A", t: "Stalled" };
-  if (d.next_action_date && d.next_action_date <= todayISO()) return { c: "#EF9F27", t: "Action due" };
-  if ((d.value || 0) >= 100000) return { c: "#639922", t: "Whale" };
+  if ((d.days_in_stage || 0) > 14) return { c: "var(--red)", t: "Stalled" };
+  if (d.next_action_date && d.next_action_date <= todayISO()) return { c: "var(--amber)", t: "Action due" };
+  if ((d.value || 0) >= 100000) return { c: "var(--blue)", t: "Whale" };
   return null;
 }
 
@@ -197,7 +200,7 @@ export default function Pipeline({ API, pageAction, clearAction, openDealId, cle
             <span style={{ fontSize: 14.5, fontWeight: 600, color: "var(--text)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{d.company || "—"}</span>
             {h && isMobile && <span style={{ fontSize: 10.5, fontWeight: 600, color: h.c, flex: "0 0 auto", whiteSpace: "nowrap" }}>{h.t}</span>}
           </div>
-          <span style={{ fontSize: 14, fontWeight: 600, color: big ? "#97C459" : "var(--text)", flex: "0 0 auto", marginLeft: 8 }}>{fmtK(d.value)}</span>
+          <span style={{ fontSize: 14, fontWeight: 600, color: big ? "var(--brand-bright)" : "var(--text)", flex: "0 0 auto", marginLeft: 8 }}>{fmtK(d.value)}</span>
         </div>
         <div style={{ marginTop: 9 }}><span style={{ fontSize: 11, color: "var(--brand-bright)", background: "var(--cyan-dim)", padding: "2px 8px", borderRadius: 5 }}>{dealSize(d.value || 0)}</span></div>
         {d.next_action ? (
@@ -258,7 +261,7 @@ export default function Pipeline({ API, pageAction, clearAction, openDealId, cle
   };
 
   const statusPill = (() => {
-    const map = { sent: { bg: "#d7e9e1", fg: "#1b6a58", t: "Sent" }, draft: { bg: "#efe4c4", fg: "#7d6217", t: "Draft" } };
+    const map = { sent: { bg: "color-mix(in srgb, var(--green) 10%, var(--card))", fg: "var(--green)", t: "Sent" }, draft: { bg: "color-mix(in srgb, var(--amber) 10%, var(--card))", fg: "var(--amber)", t: "Draft" } };
     const s = map[quoteStatus];
     return s ? <span style={{ background: s.bg, color: s.fg, fontSize: 12, fontWeight: 600, padding: "2px 10px", borderRadius: 6 }}>{s.t}</span> : null;
   })();
@@ -297,14 +300,14 @@ export default function Pipeline({ API, pageAction, clearAction, openDealId, cle
           <input style={field} type="date" value={(draft.expected_close_date || "").slice(0, 10)} onChange={(e) => setDraft({ ...draft, expected_close_date: e.target.value })} />
 
           <button onClick={save} disabled={saving || isGuest} title={isGuest ? "Guest accounts are read-only" : ""}
-            style={{ width: "100%", marginTop: 20, padding: "11px 16px", borderRadius: 10, border: "none", background: "var(--cyan)", color: "#fff", fontFamily: "Inter", fontSize: 14, fontWeight: 600, cursor: isGuest ? "not-allowed" : "pointer", opacity: saving || isGuest ? 0.7 : 1 }}>
+            style={{ width: "100%", marginTop: 20, padding: "11px 16px", borderRadius: 10, border: "none", background: "var(--brand-fill)", color: "var(--on-brand)", fontFamily: "Inter", fontSize: 14, fontWeight: 600, cursor: isGuest ? "not-allowed" : "pointer", opacity: saving || isGuest ? 0.7 : 1 }}>
             {saving ? "Saving…" : (selected === "new" ? "Create deal" : "Save changes")}
           </button>
 
           {selected !== "new" && !isGuest && (
             <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
-              <button onClick={() => quickStage("Closed-Won")} style={{ flex: 1, padding: "9px", borderRadius: 9, border: "1px solid #4a6b2a", background: "transparent", color: "#97C459", fontFamily: "Inter", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>Mark won</button>
-              <button onClick={() => quickStage("Closed-Lost")} style={{ flex: 1, padding: "9px", borderRadius: 9, border: "1px solid #6e3636", background: "transparent", color: "var(--danger-soft)", fontFamily: "Inter", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>Mark lost</button>
+              <button onClick={() => quickStage("Closed-Won")} style={{ flex: 1, padding: "9px", borderRadius: 9, border: "1px solid color-mix(in srgb, var(--green) 45%, var(--card))", background: "transparent", color: "var(--green)", fontFamily: "Inter", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>Mark won</button>
+              <button onClick={() => quickStage("Closed-Lost")} style={{ flex: 1, padding: "9px", borderRadius: 9, border: "1px solid color-mix(in srgb, var(--danger-soft) 45%, var(--card))", background: "transparent", color: "var(--danger-soft)", fontFamily: "Inter", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>Mark lost</button>
               <button onClick={del} style={{ padding: "9px 12px", borderRadius: 9, border: "1px solid var(--border2)", background: "transparent", color: "var(--text3)", fontFamily: "Inter", fontSize: 13, cursor: "pointer" }}>Delete</button>
             </div>
           )}
@@ -371,7 +374,7 @@ export default function Pipeline({ API, pageAction, clearAction, openDealId, cle
                       style={{ flex: 1, padding: "10px", borderRadius: 9, border: "1px solid var(--border2)", background: "transparent", color: "var(--text)", fontFamily: "Inter", fontSize: 14, fontWeight: 600, cursor: isGuest ? "not-allowed" : "pointer", opacity: isGuest ? 0.6 : 1 }}>
                       {quoteSaving ? "Saving…" : "Save quote"}</button>
                     <button onClick={sendQuote} disabled={quoteSaving || quoteSending || isGuest} title={isGuest ? "Guest accounts are read-only" : ""}
-                      style={{ flex: 1, padding: "10px", borderRadius: 9, border: "none", background: "var(--cyan)", color: "#fff", fontFamily: "Inter", fontSize: 14, fontWeight: 600, cursor: isGuest ? "not-allowed" : "pointer", opacity: (quoteSaving || quoteSending || isGuest) ? 0.7 : 1 }}>
+                      style={{ flex: 1, padding: "10px", borderRadius: 9, border: "none", background: "var(--brand-fill)", color: "var(--on-brand)", fontFamily: "Inter", fontSize: 14, fontWeight: 600, cursor: isGuest ? "not-allowed" : "pointer", opacity: (quoteSaving || quoteSending || isGuest) ? 0.7 : 1 }}>
                       {quoteSending ? "Sending…" : "Mark as sent"}</button>
                   </div>
                   {quoteMsg ? <div style={{ fontSize: 12.5, color: "var(--text3)", marginTop: 8, textAlign: "right" }}>{quoteMsg}</div> : null}
@@ -389,7 +392,7 @@ export default function Pipeline({ API, pageAction, clearAction, openDealId, cle
     <div>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4 }}>
         <div style={{ fontFamily: "var(--font-display)", fontSize: 32, fontWeight: 700, color: "var(--text)", letterSpacing: -0.5 }}>Pipeline</div>
-        {!isGuest && <button onClick={openNew} style={{ background: "var(--cyan)", color: "#fff", border: "none", fontFamily: "Inter", fontSize: 14, fontWeight: 600, padding: "9px 16px", borderRadius: 9, cursor: "pointer" }}>+ New deal</button>}
+        {!isGuest && <button onClick={openNew} style={{ background: "var(--brand-fill)", color: "var(--on-brand)", border: "none", fontFamily: "Inter", fontSize: 14, fontWeight: 600, padding: "9px 16px", borderRadius: 9, cursor: "pointer" }}>+ New deal</button>}
       </div>
       <div style={{ color: "var(--text2)", fontSize: 15, marginBottom: 20 }}>{isMobile ? "Tap a deal to open it, or move it to a stage below" : "Drag deals between stages"} · {fmtBig(openValue)} open across pipeline</div>
 

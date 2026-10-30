@@ -437,8 +437,8 @@ export default function Login({ API, onAuthenticated }) {
               disabled={submitting || guestLoading}
               aria-busy={submitting}
               style={{
-                position: "relative", width: "100%", marginTop: 16, background: "var(--cyan)", border: "none",
-                borderRadius: 9, padding: "13px", color: "#ffffff", fontFamily: "var(--font-body)", fontSize: 14,
+                position: "relative", width: "100%", marginTop: 16, background: "var(--brand-fill)", border: "none",
+                borderRadius: 9, padding: "13px", color: "var(--on-brand)", fontFamily: "var(--font-body)", fontSize: 14,
                 fontWeight: 600, cursor: submitting ? "default" : "pointer",
               }}
             >
@@ -446,7 +446,7 @@ export default function Login({ API, onAuthenticated }) {
                 {mode === "login" ? "Sign in" : "Create account"}
               </span>
               <span ref={btnSpinnerRef} style={{ visibility: "hidden", opacity: 0, position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <span style={{ width: 15, height: 15, border: "2px solid rgba(255,255,255,0.35)", borderTop: "2px solid #ffffff", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
+                <span style={{ width: 15, height: 15, border: "2px solid color-mix(in srgb, var(--on-brand) 35%, transparent)", borderTop: "2px solid var(--on-brand)", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
               </span>
             </button>
             {submitSlow && (

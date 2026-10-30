@@ -199,7 +199,7 @@ export default function RelationshipMap({ data }) {
           cx={centerX}
           cy={centerY}
           r={companyNodeRadius}
-          fill="var(--cyan)"
+          fill="var(--brand-fill)"
           opacity={0.9}
         />
         <text
@@ -207,7 +207,7 @@ export default function RelationshipMap({ data }) {
           y={centerY}
           textAnchor="middle"
           dominantBaseline="middle"
-          fill="#fff"
+          fill="var(--on-brand)"
           fontSize={11}
           fontWeight={700}
           letterSpacing="0.02em"
