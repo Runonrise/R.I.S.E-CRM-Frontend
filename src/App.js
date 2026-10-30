@@ -384,7 +384,9 @@ export default function App() {
         </aside>
       )}
 
-      <main style={{ flex: 1, minWidth: 0, height: "100%", overflowY: "auto", padding: isMobile ? "16px 16px 28px" : "28px 34px", position: "relative", paddingTop: isMobile ? 4 : 16 }}>
+      <main style={{ flex: 1, minWidth: 0, height: "100%", overflowY: "auto", padding: isMobile ? "16px 16px 28px" : "28px 34px", position: "relative", paddingTop: isMobile ? 4 : 16,
+        // Room to scroll the last row clear of the floating chat button (24px offset + 52px button).
+        paddingBottom: 96 }}>
         <div style={{ position: "sticky", top: 0, display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 8, zIndex: 10, paddingBottom: 8 }}>
           <NotificationCenter API={API} isGuest={isGuest} />
         </div>
