@@ -28,6 +28,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet" />
     <title>R.I.S.E CRM</title>
+    <!-- Obsidian behind the page while the route chunk loads, so /app does
+         not flash white. :where() has zero specificity, so App.css and the
+         landing styles always win once they load. -->
+    <style>:where(body) { background-color: #0A0910; }</style>
   </head>
   <body data-theme="dark">
     <noscript>You need to enable JavaScript to run this app.</noscript>
