@@ -1,61 +1,628 @@
 /* Landing page styles. Everything is scoped under .rise-landing so nothing
-   here reaches the CRM at /app. Tokens live on .rise-landing, not :root. */
+   here reaches the CRM at /app. Tokens live on .rise-landing, not :root.
+   Pink and violet are small accents only. Violet is for fills and borders,
+   never small text. */
 
 .rise-landing {
-  --rl-bg:   #0A0910; /* obsidian */
-  --rl-text: #ECEAF5; /* page tint */
+  --rl-bg:            #0A0910; /* obsidian */
+  --rl-surface:       #15131F;
+  --rl-surface-2:     #1D1A2B;
+  --rl-border:        #2A2740;
+  --rl-border-strong: #3A3654;
+  --rl-outline:       #6E6990; /* 3:1 on obsidian, for button edges */
+  --rl-text:          #F4F3FA;
+  --rl-text-2:        #BFBBD3;
+  --rl-text-3:        #9692AE;
+  --rl-pink:          #EC3B8B;
+  --rl-pink-soft:     #F27AB6;
+  --rl-pink-wash:     rgba(236, 59, 139, 0.12);
+  --rl-violet-line:   rgba(139, 43, 226, 0.45);
+  --rl-indigo:        #1A1590;
+  --rl-on-indigo-2:   #D8D6F3;
+  --rl-tint:          #ECEAF5;
+  --rl-on-accent:     #0A0910;
+  --rl-shadow:        0 24px 60px -28px rgba(0, 0, 0, 0.75);
+
+  --rl-font-body:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --rl-font-display: 'Space Grotesk', 'Inter', -apple-system, sans-serif;
+  --rl-header-h: 64px;
+  --rl-gutter: 20px;
 
   min-height: 100vh;
-  min-height: 100dvh;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 24px;
-  padding: 48px 16px;
   background: var(--rl-bg);
   color: var(--rl-text);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  text-align: center;
+  font-family: var(--rl-font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.rise-landing *,
-.rise-landing *::before,
-.rise-landing *::after {
+/* Base resets use :where() so they add no specificity and every
+   component rule below wins over them. */
+.rise-landing :where(*, *::before, *::after) {
   box-sizing: border-box;
 }
 
-.rise-landing__logo {
-  display: block;
-  width: min(420px, 100%);
-  height: auto;
-}
-
-.rise-landing__title {
+.rise-landing :where(h1, h2, h3, p, ul, ol, figure) {
   margin: 0;
-  font-family: 'Space Grotesk', 'Inter', -apple-system, sans-serif;
-  font-size: 28px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
+  padding: 0;
 }
 
-.rise-landing__cta {
-  display: inline-block;
-  padding: 12px 24px;
-  border-radius: 999px;
-  background: var(--rl-text);
-  color: var(--rl-bg);
-  font-size: 16px;
+.rise-landing :where(ul, ol) {
+  list-style: none;
+}
+
+.rise-landing :where(img, svg, video, iframe) {
+  display: block;
+  max-width: 100%;
+}
+
+.rise-landing :where(p) {
+  text-wrap: pretty;
+}
+
+.rise-landing :where(h1, h2, h3) {
+  font-family: var(--rl-font-display);
+  font-weight: 600;
+  color: var(--rl-text);
+  text-wrap: balance;
+}
+
+.rise-landing :where(a) {
+  color: inherit;
+}
+
+.rise-landing__nowrap {
+  white-space: nowrap;
+}
+
+.rise-landing :focus-visible {
+  outline: 2px solid var(--rl-pink-soft);
+  outline-offset: 3px;
+}
+
+/* Sections and <main> take focus only so in-page links land in the right
+   place for keyboard users. They are not controls, so no ring. */
+.rise-landing [tabindex="-1"]:focus {
+  outline: none;
+}
+
+.rise-landing__container {
+  width: 100%;
+  max-width: 1120px;
+  margin-inline: auto;
+  padding-inline: var(--rl-gutter);
+}
+
+.rise-landing__container--wide {
+  max-width: 1240px;
+}
+
+/* Skip link */
+
+.rise-landing__skip {
+  position: absolute;
+  left: 12px;
+  top: -100px;
+  z-index: 30;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: var(--rl-tint);
+  color: var(--rl-on-accent);
   font-weight: 600;
   text-decoration: none;
 }
 
-.rise-landing__cta:hover {
-  text-decoration: underline;
+.rise-landing__skip:focus {
+  top: 12px;
 }
 
-.rise-landing__cta:focus-visible {
-  outline: 2px solid var(--rl-text);
-  outline-offset: 3px;
+/* Buttons */
+
+.rise-landing__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 0 24px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-family: var(--rl-font-body);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.rise-landing__btn svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+.rise-landing__btn--small {
+  min-height: 40px;
+  padding: 0 18px;
+  font-size: 15px;
+}
+
+.rise-landing__btn--primary {
+  background: var(--rl-pink);
+  color: var(--rl-on-accent);
+}
+
+.rise-landing__btn--primary:hover {
+  background: var(--rl-pink-soft);
+}
+
+.rise-landing__btn--secondary {
+  border-color: var(--rl-outline);
+  color: var(--rl-text);
+}
+
+.rise-landing__btn--secondary:hover {
+  border-color: var(--rl-text-2);
+  background: var(--rl-surface);
+}
+
+.rise-landing__btn--light {
+  background: var(--rl-tint);
+  color: var(--rl-on-accent);
+}
+
+.rise-landing__btn--light:hover {
+  background: var(--rl-text);
+}
+
+/* Header */
+
+.rise-landing__header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--rl-bg);
+  border-bottom: 1px solid var(--rl-border);
+}
+
+.rise-landing__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  height: var(--rl-header-h);
+  max-width: 1240px;
+  margin-inline: auto;
+  padding-inline: var(--rl-gutter);
+}
+
+.rise-landing__brand {
+  display: block;
+  flex-shrink: 0;
+  border-radius: 4px;
+}
+
+.rise-landing__brand img {
+  width: auto;
+  height: 28px;
+}
+
+.rise-landing__nav {
+  display: none;
+  align-items: center;
+  gap: 32px;
+}
+
+.rise-landing__nav ul {
+  display: flex;
+  gap: 28px;
+}
+
+.rise-landing__nav ul a,
+.rise-landing__menu ul a {
+  color: var(--rl-text-2);
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: 4px;
+}
+
+.rise-landing__nav ul a:hover,
+.rise-landing__menu ul a:hover {
+  color: var(--rl-text);
+}
+
+.rise-landing__menu-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 14px 0 10px;
+  border: 1px solid var(--rl-outline);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--rl-text);
+  font: 500 15px/1 var(--rl-font-body);
+  cursor: pointer;
+}
+
+.rise-landing__menu-button svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.rise-landing__menu-button:hover {
+  background: var(--rl-surface);
+}
+
+/* The mobile menu drops over the page instead of pushing it down, so
+   opening it never moves the content. */
+.rise-landing__menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 8px var(--rl-gutter) 24px;
+  background: var(--rl-bg);
+  border-bottom: 1px solid var(--rl-border);
+  box-shadow: var(--rl-shadow);
+}
+
+.rise-landing__menu[hidden] {
+  display: none;
+}
+
+.rise-landing__menu ul a {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  font-size: 17px;
+}
+
+.rise-landing__menu ul li + li {
+  border-top: 1px solid var(--rl-border);
+}
+
+@media (min-width: 768px) {
+  .rise-landing__nav {
+    display: flex;
+  }
+  .rise-landing__menu-button,
+  .rise-landing__menu {
+    display: none;
+  }
+}
+
+/* Hero */
+
+.rise-landing__hero {
+  padding-top: 72px;
+}
+
+.rise-landing__hero-text {
+  text-align: center;
+}
+
+.rise-landing__hero h1 {
+  max-width: 15ch;
+  margin-inline: auto;
+  font-size: clamp(2.5rem, 1.5rem + 4.4vw, 4.75rem);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+}
+
+.rise-landing__lede {
+  max-width: 38rem;
+  margin: 24px auto 0;
+  color: var(--rl-text-2);
+  font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
+  line-height: 1.55;  text-wrap: balance;
+}
+
+.rise-landing__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 36px;
+}
+
+.rise-landing__shot {
+  margin-top: 64px;
+}
+
+.rise-landing__frame {
+  padding: 6px;
+  border: 1px solid var(--rl-violet-line);
+  border-radius: 16px;
+  background: var(--rl-surface);
+  box-shadow: var(--rl-shadow);
+}
+
+.rise-landing__frame img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2240 / 1400;
+  border-radius: 10px;
+}
+
+.rise-landing__shot figcaption {
+  margin-top: 16px;
+  color: var(--rl-text-3);
+  font-size: 14px;
+  text-align: center;  text-wrap: balance;
+}
+
+/* Sections */
+
+.rise-landing__section {
+  padding-block: 96px;
+  scroll-margin-top: var(--rl-header-h);
+}
+
+.rise-landing__intro {
+  max-width: 40rem;
+  margin-bottom: 48px;
+}
+
+.rise-landing__intro h2,
+.rise-landing__cta h2 {
+  font-size: clamp(2rem, 1.5rem + 2vw, 3rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.rise-landing__intro p {
+  margin-top: 16px;
+  color: var(--rl-text-2);
+  font-size: 1.125rem;
+}
+
+/* Feature cards */
+
+.rise-landing__cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.rise-landing__card {
+  padding: 28px 24px;
+  border: 1px solid var(--rl-border);
+  border-radius: 16px;
+  background: var(--rl-surface);
+}
+
+.rise-landing__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  background: var(--rl-pink-wash);
+}
+
+.rise-landing__icon svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: var(--rl-pink-soft);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.rise-landing__card h3,
+.rise-landing__step h3 {
+  font-size: 1.1875rem;
+  line-height: 1.3;
+}
+
+.rise-landing__card p,
+.rise-landing__step p {
+  margin-top: 10px;
+  color: var(--rl-text-2);
+  font-size: 15.5px;
+}
+
+@media (min-width: 640px) {
+  .rise-landing__cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1100px) {
+  .rise-landing__cards {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* How it works */
+
+.rise-landing__steps {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+}
+
+.rise-landing__step {
+  padding-top: 28px;
+  border-top: 1px solid var(--rl-border-strong);
+}
+
+.rise-landing__step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  margin-bottom: 20px;
+  border: 1px solid var(--rl-violet-line);
+  border-radius: 50%;
+  color: var(--rl-pink-soft);
+  font-family: var(--rl-font-display);
+  font-weight: 600;
+  font-size: 16px;
+}
+
+@media (min-width: 900px) {
+  .rise-landing__steps {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+}
+
+/* Demo */
+
+.rise-landing__video {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border: 1px solid var(--rl-border);
+  border-radius: 20px;
+  background: var(--rl-surface);
+}
+
+.rise-landing__video iframe,
+.rise-landing__video video {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.rise-landing__video--empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.rise-landing__play {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--rl-pink);
+}
+
+.rise-landing__play svg {
+  width: 28px;
+  height: 28px;
+  margin-left: 3px;
+  fill: var(--rl-on-accent);
+}
+
+.rise-landing__video-note {
+  color: var(--rl-text-2);
+  font-size: 15px;
+}
+
+/* Closing call to action */
+
+.rise-landing__section--cta {
+  padding-top: 32px;
+}
+
+.rise-landing__cta {
+  padding: 64px 24px;
+  border-radius: 24px;
+  background: var(--rl-indigo);
+  text-align: center;
+}
+
+.rise-landing__cta h2 {
+  color: var(--rl-text);
+}
+
+.rise-landing__cta p {
+  max-width: 34rem;
+  margin: 16px auto 32px;
+  color: var(--rl-on-indigo-2);
+  font-size: 1.125rem;
+}
+
+.rise-landing__cta :focus-visible {
+  outline-color: var(--rl-tint);
+}
+
+/* Footer */
+
+.rise-landing__footer {
+  padding-block: 40px 48px;
+  border-top: 1px solid var(--rl-border);
+  color: var(--rl-text-3);
+  font-size: 14px;
+}
+
+.rise-landing__footer-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rise-landing__footer-name {
+  color: var(--rl-text);
+  font-family: var(--rl-font-display);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+@media (min-width: 768px) {
+  .rise-landing {
+    --rl-header-h: 72px;
+    --rl-gutter: 32px;
+  }
+  .rise-landing__brand img {
+    height: 30px;
+  }
+  .rise-landing__hero {
+    padding-top: 112px;
+  }
+  .rise-landing__shot {
+    margin-top: 80px;
+  }
+  .rise-landing__section {
+    padding-block: 104px;
+  }
+  .rise-landing__section--cta {
+    padding-top: 32px;
+  }
+  .rise-landing__intro {
+    margin-bottom: 56px;
+  }
+  .rise-landing__cta {
+    padding: 88px 48px;
+  }
+  .rise-landing__footer-inner {
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 24px;
+  }
+}
+
+/* Hover and focus transitions only, and only when motion is welcome. */
+@media (prefers-reduced-motion: no-preference) {
+  .rise-landing__btn,
+  .rise-landing__menu-button,
+  .rise-landing__nav ul a,
+  .rise-landing__menu ul a {
+    transition: background-color 160ms ease-out, border-color 160ms ease-out, color 160ms ease-out;
+  }
 }
