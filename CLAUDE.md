@@ -30,3 +30,7 @@ Backend is a separate Flask repo on Render. Do not touch API calls unless told t
 - Mobile first. Check 390px and 1440px widths.
 - Landing page at "/", CRM at "/app/*", login stays inside the CRM.
 - Plain, natural copy. No em dashes, no corporate buzzwords.
+
+## Logo files
+- In the CRM app: rise-crm-lockup-for-dark.png on dark surfaces, rise-crm-lockup.png on light surfaces, rise-crm-mark.png for small spots like the sidebar.
+- Landing page only: runonrise-lockup-for-dark.png and runonrise-lockup-for-light.png, runonrise-mark.png for the hero reflection.
