@@ -7,7 +7,11 @@ import NotificationCenter from "./components/NotificationCenter";
 import ChatWidget from "./components/ChatWidget";
 import PageTransition from "./components/PageTransition";
 import useBreakpoint from "./hooks/useBreakpoint";
+import riseMark from "./assets/brand/rise-crm-mark.png";
 import "./App.css";
+
+// rise-crm-mark.png is 900x674.
+const MARK_RATIO = 674 / 900;
 
 // Lazy-loaded: each of these only needs to download once the user actually
 // navigates there, instead of every page's code shipping in the bundle the
@@ -215,7 +219,8 @@ export default function App() {
     );
   }
 
-  const SIDEBAR_W = collapsed ? 66 : 222;
+  // Expanded width grew 26px (from 222) to fit the "R.I.S.E CRM" wordmark.
+  const SIDEBAR_W = collapsed ? 66 : 248;
   const ghostBtn = {
     display: "flex", alignItems: "center", gap: 10, justifyContent: collapsed ? "center" : "flex-start",
     width: "100%", padding: collapsed ? "10px 0" : "10px 12px", borderRadius: 9,
@@ -289,10 +294,10 @@ export default function App() {
 
   const sidebarBrand = (size = 32) => (
     <div style={{ display: "flex", alignItems: "center", gap: 11 }}>
-      <div style={{ width: size, height: size, flex: "0 0 auto", borderRadius: 9, background: "var(--cyan)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <svg width={size / 2} height={size / 2} viewBox="0 0 24 24" fill="#ffffff" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg>
+      <div style={{ width: size, height: size, flex: "0 0 auto", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <img src={riseMark} alt="" aria-hidden="true" width={size} height={Math.round(size * MARK_RATIO)} style={{ display: "block" }} />
       </div>
-      <div style={{ fontSize: 16, fontWeight: 600, color: "var(--logo-text)" }}>RetainIQ</div>
+      <div style={{ fontSize: 16, fontWeight: 600, color: "var(--logo-text)", whiteSpace: "nowrap" }}>R.I.S.E CRM</div>
       {isGuest && (
         <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: 0.5, color: "var(--text3)", border: "1px solid var(--border2)", borderRadius: 999, padding: "2px 8px", textTransform: "uppercase" }}>
           Guest
@@ -347,8 +352,9 @@ export default function App() {
       ) : (
         <aside style={{ width: SIDEBAR_W, flex: "0 0 auto", background: "var(--sidebar)", borderRight: "1px solid var(--border)", padding: collapsed ? "16px 9px" : "16px 14px", transition: "width .22s ease, padding .22s ease", display: "flex", flexDirection: "column", height: "100%", boxSizing: "border-box" }}>
 
-          <div style={{ display: "flex", alignItems: "center", justifyContent: collapsed ? "center" : "space-between", marginBottom: 22 }}>
+          <div style={{ display: "flex", flexDirection: collapsed ? "column" : "row", gap: collapsed ? 10 : 0, alignItems: "center", justifyContent: collapsed ? "center" : "space-between", marginBottom: 22 }}>
             {!collapsed && sidebarBrand(32)}
+            {collapsed && <img src={riseMark} alt="R.I.S.E CRM" width={32} height={Math.round(32 * MARK_RATIO)} style={{ display: "block" }} />}
             <button onClick={toggleSidebar} title={collapsed ? "Expand sidebar" : "Collapse sidebar"} aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
               style={{ background: "transparent", border: "none", color: "var(--text3)", cursor: "pointer", padding: 6, borderRadius: 8, display: "flex", lineHeight: 0, flex: "0 0 auto" }}
               onMouseEnter={(e) => { e.currentTarget.style.background = "var(--hover2)"; e.currentTarget.style.color = "var(--text2)"; }}

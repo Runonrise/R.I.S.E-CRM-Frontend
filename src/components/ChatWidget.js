@@ -263,7 +263,7 @@ export default function ChatWidget({ API, isGuest }) {
           >
             <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "16px 16px 14px", borderBottom: "1px solid var(--border)", flexShrink: 0 }}>
               <span style={{ color: "var(--purple)", display: "flex" }}>{ICONS.sparkle}</span>
-              <span style={{ fontSize: 15, fontWeight: 700, color: "var(--text)", flex: 1, letterSpacing: "-0.01em" }}>Ask RetainIQ</span>
+              <span style={{ fontSize: 15, fontWeight: 700, color: "var(--text)", flex: 1, letterSpacing: "-0.01em" }}>Ask R.I.S.E CRM</span>
               <button
                 onClick={() => setOpen(false)}
                 aria-label="Close chat"

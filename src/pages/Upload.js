@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { authHeaders, invalidateCache } from "../utils/api";
+import BrandLockup from "../components/BrandLockup";
 
 export default function Upload({ onUpload, onSkip, API, onCancel }) {
   const [dragging, setDragging] = useState(false);
@@ -52,10 +53,7 @@ export default function Upload({ onUpload, onSkip, API, onCancel }) {
         )}
 
         <div style={{ display: "flex", alignItems: "center", gap: 11, marginBottom: 20 }}>
-          <div style={{ width: 34, height: 34, flex: "0 0 auto", borderRadius: 9, background: "var(--cyan)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="#ffffff" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg>
-          </div>
-          <div style={{ fontSize: 16, fontWeight: 600, color: "var(--logo-text)" }}>RetainIQ</div>
+          <BrandLockup width={130} />
         </div>
 
         <div style={{ fontSize: 21, fontWeight: 600, color: "var(--text)", letterSpacing: -0.3 }}>Change data</div>

@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import gsap from "gsap";
 import useBreakpoint from "../hooks/useBreakpoint";
+import BrandLockup from "../components/BrandLockup";
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
@@ -331,17 +332,14 @@ export default function Login({ API, onAuthenticated }) {
             borderRight: "1px solid var(--border)",
           }}>
             <div style={{ display: "flex", alignItems: "center", gap: 11, marginBottom: 40 }}>
-              <div style={{ width: 32, height: 32, flex: "0 0 auto", borderRadius: 9, background: "var(--cyan)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="#ffffff" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z" /></svg>
-              </div>
-              <div style={{ fontSize: 16, fontWeight: 600, color: "var(--logo-text)" }}>RetainIQ</div>
+              <BrandLockup width={180} />
             </div>
 
             <div style={{ fontFamily: "var(--font-display)", fontSize: 26, fontWeight: 700, color: "var(--text)", letterSpacing: -0.4, lineHeight: 1.15, marginBottom: 12 }}>
               Every renewal,<br />seen coming.
             </div>
             <div style={{ color: "var(--text2)", fontSize: 13.5, lineHeight: 1.6, maxWidth: 260, marginBottom: 8 }}>
-              RetainIQ scores churn risk in real time, so your team calls the account before it becomes a statistic.
+              R.I.S.E CRM scores churn risk in real time, so your team calls the account before it becomes a statistic.
             </div>
 
             <RelationshipMoment />
@@ -351,10 +349,7 @@ export default function Login({ API, onAuthenticated }) {
         <div style={{ flex: "1 1 auto", padding: showIllustration ? "48px 48px" : "40px 28px", display: "flex", flexDirection: "column", justifyContent: "center", boxSizing: "border-box" }}>
           {!showIllustration && (
             <div style={{ display: "flex", alignItems: "center", gap: 11, marginBottom: 32 }}>
-              <div style={{ width: 30, height: 30, flex: "0 0 auto", borderRadius: 9, background: "var(--cyan)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="#ffffff" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z" /></svg>
-              </div>
-              <div style={{ fontSize: 15, fontWeight: 600, color: "var(--text)" }}>RetainIQ</div>
+              <BrandLockup width={120} />
             </div>
           )}
 
@@ -521,7 +516,7 @@ export default function Login({ API, onAuthenticated }) {
           )}
 
           <div style={{ textAlign: "center", marginTop: 28, fontSize: 11, color: "var(--text3)" }}>
-            RetainIQ · Digital Move IT & Telecom
+            R.I.S.E CRM · Digital Move IT & Telecom
           </div>
         </div>
       </div>

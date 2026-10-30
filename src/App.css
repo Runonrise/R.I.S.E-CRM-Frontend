@@ -84,6 +84,12 @@ body {
   outline-offset: 2px;
 }
 
+/* Theme-matched logo lockups (components/BrandLockup.js). */
+.rise-logo-on-light { display: block; }
+.rise-logo-on-dark  { display: none; }
+[data-theme="dark"] .rise-logo-on-light { display: none; }
+[data-theme="dark"] .rise-logo-on-dark  { display: block; }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
