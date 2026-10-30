@@ -1,0 +1,23 @@
+{
+  "name": "r.i.s.e-crm-frontend",
+  "version": "1.0.0",
+  "description": "Web App for R.I.S.E (Retention Intelligence on Sales Engagement), a CRM that predicts customer churn and helps teams act on it.",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Runonrise/R.I.S.E-CRM-Frontend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Runonrise/R.I.S.E-CRM-Frontend/issues"
+  },
+  "homepage": "https://github.com/Runonrise/R.I.S.E-CRM-Frontend#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.64.1",
+    "@types/node": "^26.6.6"
+  }
+}
