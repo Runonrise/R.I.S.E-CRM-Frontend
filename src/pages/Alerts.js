@@ -37,6 +37,30 @@ function RetentionTooltip({ active, payload, label }) {
   );
 }
 
+// Label for the "N contracts expired here" dot. Anchored by where the point
+// sits so it never spills past the plot: start in the left third, end in the
+// right third, middle otherwise. A card-colored outline (paint-order stroke)
+// keeps it legible over gridlines and the line itself.
+function ExpiredLabel({ viewBox, text, anchor }) {
+  if (!viewBox) return null;
+  const x = viewBox.x + (viewBox.width || 0) / 2;
+  const y = viewBox.y - 9;
+  return (
+    <text x={x} y={y} textAnchor={anchor} fill="var(--red)" stroke="var(--card)" strokeWidth={3}
+      strokeLinejoin="round" paintOrder="stroke" fontSize={11} fontWeight={600} fontFamily="Inter, sans-serif">
+      {text}
+    </text>
+  );
+}
+
+function expiredLabelAnchor(index, count) {
+  if (count < 2 || index < 0) return "middle";
+  const pos = index / (count - 1);
+  if (pos < 1 / 3) return "start";
+  if (pos > 2 / 3) return "end";
+  return "middle";
+}
+
 function ForecastTooltip({ active, payload, label }) {
   if (!active || !payload || !payload.length) return null;
   return (
@@ -255,7 +279,7 @@ export default function Analytics({ API }) {
             <div style={cardTitle}>Retention trend</div>
             {retention.length > 0 ? (
               <ResponsiveContainer width="100%" height={180}>
-                <AreaChart data={retention} margin={{ top: 6, right: 24, left: 0, bottom: 0 }}
+                <AreaChart data={retention} margin={{ top: 16, right: 24, left: 6, bottom: 0 }}
                   accessibilityLayer role="img" aria-label={`Retention trend over the last ${horizon} months, ending at ${retention[retention.length - 1]?.retention_pct}%`}>
                   <defs>
                     <linearGradient id="retentionFill" x1="0" y1="0" x2="0" y2="1">
@@ -266,8 +290,9 @@ export default function Analytics({ API }) {
                   </defs>
                   <CartesianGrid vertical={false} stroke="var(--border)" />
                   <XAxis dataKey="month" tick={tickStyle} axisLine={{ stroke: "var(--border)" }} tickLine={false}
+                    padding={{ left: 28, right: 28 }}
                     interval={isMobile ? 1 : (horizon === "12" ? 1 : 0)} />
-                  <YAxis domain={retentionYDomain} tick={tickStyle} axisLine={false} tickLine={false} width={38}
+                  <YAxis domain={retentionYDomain} tick={tickStyle} axisLine={false} tickLine={false} width={44}
                     tickFormatter={(v) => v + "%"} />
                   <Tooltip content={<RetentionTooltip />} cursor={{ stroke: "var(--border2)", strokeWidth: 1 }} />
                   <Area type="monotone" dataKey="retention_pct" stroke="var(--brand-bright)" strokeWidth={2.5}
@@ -275,7 +300,8 @@ export default function Analytics({ API }) {
                     activeDot={{ r: 5, fill: "var(--brand-bright)", stroke: "var(--card)", strokeWidth: 2 }} />
                   {inflection && (
                     <ReferenceDot x={inflection.month} y={inflection.retention_pct} r={0}
-                      label={{ value: `${inflection.n} contracts expired here`, position: "top", fill: "var(--red)", fontSize: 11, fontWeight: 600, fontFamily: "Inter, sans-serif" }} />
+                      label={<ExpiredLabel text={`${inflection.n} contracts expired here`}
+                        anchor={expiredLabelAnchor(retention.findIndex((r) => r.month === inflection.month), retention.length)} />} />
                   )}
                 </AreaChart>
               </ResponsiveContainer>
