@@ -1,0 +1,61 @@
+/* Landing page styles. Everything is scoped under .rise-landing so nothing
+   here reaches the CRM at /app. Tokens live on .rise-landing, not :root. */
+
+.rise-landing {
+  --rl-bg:   #0A0910; /* obsidian */
+  --rl-text: #ECEAF5; /* page tint */
+
+  min-height: 100vh;
+  min-height: 100dvh;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 48px 16px;
+  background: var(--rl-bg);
+  color: var(--rl-text);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  text-align: center;
+}
+
+.rise-landing *,
+.rise-landing *::before,
+.rise-landing *::after {
+  box-sizing: border-box;
+}
+
+.rise-landing__logo {
+  display: block;
+  width: min(420px, 100%);
+  height: auto;
+}
+
+.rise-landing__title {
+  margin: 0;
+  font-family: 'Space Grotesk', 'Inter', -apple-system, sans-serif;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.rise-landing__cta {
+  display: inline-block;
+  padding: 12px 24px;
+  border-radius: 999px;
+  background: var(--rl-text);
+  color: var(--rl-bg);
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.rise-landing__cta:hover {
+  text-decoration: underline;
+}
+
+.rise-landing__cta:focus-visible {
+  outline: 2px solid var(--rl-text);
+  outline-offset: 3px;
+}
