@@ -12,8 +12,8 @@ const money = (v) => "$" + Number(v || 0).toLocaleString(undefined, { minimumFra
 const fmtDate = (s) => { if (!s) return "—"; const d = new Date(s); return isNaN(d) ? s : d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }); };
 
 const STATUS = {
-  sent:  { bg: "color-mix(in srgb, var(--green) 16%, transparent)", fg: "var(--green)", t: "Sent" },
-  draft: { bg: "color-mix(in srgb, var(--amber) 16%, transparent)", fg: "var(--amber)", t: "Draft" },
+  sent:  { bg: "color-mix(in srgb, var(--green) 16%, transparent)", fg: "color-mix(in srgb, var(--green) 75%, var(--text))", t: "Sent" },
+  draft: { bg: "color-mix(in srgb, var(--amber) 16%, transparent)", fg: "color-mix(in srgb, var(--amber) 75%, var(--text))", t: "Draft" },
 };
 
 export default function Quotes({ API, onOpenDeal }) {
@@ -106,9 +106,9 @@ export default function Quotes({ API, onOpenDeal }) {
         <button onClick={() => setStatus("all")}
           style={{ ...pill, ...(status === "all" ? { border: "1px solid var(--cyan)", background: "var(--cyan-dim)", color: "var(--cyan)" } : {}) }}>All</button>
         <button onClick={() => setStatus("draft")}
-          style={{ ...pill, ...(status === "draft" ? { border: "1px solid var(--amber)", color: "var(--amber)", background: STATUS.draft.bg } : {}) }}>Draft</button>
+          style={{ ...pill, ...(status === "draft" ? { border: "1px solid var(--amber)", color: STATUS.draft.fg, background: STATUS.draft.bg } : {}) }}>Draft</button>
         <button onClick={() => setStatus("sent")}
-          style={{ ...pill, ...(status === "sent" ? { border: "1px solid var(--green)", color: "var(--green)", background: STATUS.sent.bg } : {}) }}>Sent</button>
+          style={{ ...pill, ...(status === "sent" ? { border: "1px solid var(--green)", color: STATUS.sent.fg, background: STATUS.sent.bg } : {}) }}>Sent</button>
         {activeFilters && (
           <button onClick={clearFilters} style={{ ...ctrl, cursor: "pointer", color: "var(--text2)", background: "transparent" }}>Clear filters</button>
         )}

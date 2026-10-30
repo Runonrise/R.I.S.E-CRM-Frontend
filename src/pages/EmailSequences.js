@@ -92,7 +92,7 @@ export default function EmailSequences() {
         display: "inline-flex", alignItems: "center", gap: 5,
         padding: "3px 10px", borderRadius: 999, fontSize: 11, fontWeight: 600,
         background: isActive ? "color-mix(in srgb, var(--green) 14%, transparent)" : "color-mix(in srgb, var(--amber) 14%, transparent)",
-        color: isActive ? "var(--green)" : "var(--amber)",
+        color: isActive ? "color-mix(in srgb, var(--green) 75%, var(--text))" : "color-mix(in srgb, var(--amber) 75%, var(--text))",
         textTransform: "capitalize"
       }}>
         <span style={{ width: 6, height: 6, borderRadius: "50%", background: isActive ? "var(--green)" : "var(--amber)" }} />

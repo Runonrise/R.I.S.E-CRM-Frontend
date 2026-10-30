@@ -85,7 +85,7 @@ const DealInsightCard = memo(function DealInsightCard({ insight, matchedDeal, on
         <span
           style={{
             fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em",
-            color: getSeverityColor(insight.severity),
+            color: `color-mix(in srgb, ${getSeverityColor(insight.severity)} 75%, var(--text))`,
             background: `color-mix(in srgb, ${getSeverityColor(insight.severity)} 12%, transparent)`,
             padding: "3px 9px", borderRadius: 10, flexShrink: 0,
           }}
@@ -230,7 +230,7 @@ export default function CopilotPage({ API, onOpenDeal }) {
                 borderRadius: "var(--radius)",
                 border: selectedMapIndex === idx ? "1px solid var(--cyan)" : "1px solid var(--border)",
                 background: selectedMapIndex === idx ? "color-mix(in srgb, var(--cyan) 12%, transparent)" : "transparent",
-                color: selectedMapIndex === idx ? "var(--cyan)" : "var(--text2)",
+                color: selectedMapIndex === idx ? "var(--brand-bright)" : "var(--text2)",
                 cursor: "pointer",
                 whiteSpace: "nowrap",
                 transition: "all 0.15s",
