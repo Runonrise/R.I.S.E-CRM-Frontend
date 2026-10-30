@@ -80,7 +80,7 @@ export default function NotificationCenter({ API, isGuest }) {
 
   return (
     <div ref={ref} style={{ position: "relative" }}>
-      <button onClick={() => setOpen(o => !o)}
+      <button onClick={() => setOpen(o => !o)} aria-label="Notifications" aria-expanded={open}
         style={{ background: "transparent", border: "none", color: "var(--text2)", cursor: "pointer", padding: 8, borderRadius: 8, display: "flex", alignItems: "center", position: "relative" }}
         onMouseEnter={e => e.currentTarget.style.background = "var(--hover2)"}
         onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
