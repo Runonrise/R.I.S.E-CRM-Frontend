@@ -3,10 +3,12 @@ import runonriseLockup from "../assets/brand/runonrise-lockup-for-dark.png";
 import dashboardShot from "../assets/landing/dashboard-dark.webp";
 import "./landing.css";
 
-// Demo video. Leave empty to show the placeholder.
-// Accepts a YouTube embed link (https://www.youtube.com/embed/VIDEO_ID)
-// or a direct video file (.mp4 or .webm).
+// Demo video. Accepts a YouTube embed link
+// (https://www.youtube.com/embed/VIDEO_ID) or a direct video file (.mp4 or
+// .webm). While it is empty, the Demo link and section are hidden and the
+// hero's second button points to "How it works" instead.
 const VIDEO_URL = "";
+const HAS_VIDEO = VIDEO_URL.trim() !== "";
 
 // Plain links on purpose: a full page load into /app means the CRM styles
 // never get added to this page, even after pressing Back.
@@ -15,7 +17,7 @@ const APP_URL = "/app";
 const NAV = [
   { id: "features", label: "Features" },
   { id: "how-it-works", label: "How it works" },
-  { id: "demo", label: "Demo" },
+  ...(HAS_VIDEO ? [{ id: "demo", label: "Demo" }] : []),
 ];
 
 const FEATURES = [
@@ -92,16 +94,6 @@ function goToSection(id) {
 }
 
 function DemoVideo() {
-  if (!VIDEO_URL) {
-    return (
-      <div className="rise-landing__video rise-landing__video--empty">
-        <span className="rise-landing__play" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="M9 6.5v11l9-5.5z" /></svg>
-        </span>
-        <p className="rise-landing__video-note">Demo video coming soon</p>
-      </div>
-    );
-  }
   if (/\.(mp4|webm)(\?|#|$)/i.test(VIDEO_URL)) {
     return (
       <div className="rise-landing__video">
@@ -224,14 +216,24 @@ export default function LandingPage() {
               <a className="rise-landing__btn rise-landing__btn--primary" href={APP_URL}>
                 Launch App
               </a>
-              <a
-                className="rise-landing__btn rise-landing__btn--secondary"
-                href="#demo"
-                onClick={(e) => onSectionLink(e, "demo")}
-              >
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6.5v11l9-5.5z" /></svg>
-                Watch demo
-              </a>
+              {HAS_VIDEO ? (
+                <a
+                  className="rise-landing__btn rise-landing__btn--secondary"
+                  href="#demo"
+                  onClick={(e) => onSectionLink(e, "demo")}
+                >
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6.5v11l9-5.5z" /></svg>
+                  Watch demo
+                </a>
+              ) : (
+                <a
+                  className="rise-landing__btn rise-landing__btn--secondary"
+                  href="#how-it-works"
+                  onClick={(e) => onSectionLink(e, "how-it-works")}
+                >
+                  See how it works
+                </a>
+              )}
             </div>
           </div>
 
@@ -292,15 +294,17 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section id="demo" className="rise-landing__section" aria-labelledby="demo-title" tabIndex={-1}>
-          <div className="rise-landing__container">
-            <div className="rise-landing__intro">
-              <h2 id="demo-title">See it in action</h2>
-              <p>A short walkthrough of R.I.S.E CRM and how it helps your team keep customers.</p>
+        {HAS_VIDEO && (
+          <section id="demo" className="rise-landing__section" aria-labelledby="demo-title" tabIndex={-1}>
+            <div className="rise-landing__container">
+              <div className="rise-landing__intro">
+                <h2 id="demo-title">See it in action</h2>
+                <p>A short walkthrough of R.I.S.E CRM and how it helps your team keep customers.</p>
+              </div>
+              <DemoVideo />
             </div>
-            <DemoVideo />
-          </div>
-        </section>
+          </section>
+        )}
 
         <section className="rise-landing__section rise-landing__section--cta" aria-labelledby="cta-title">
           <div className="rise-landing__container">

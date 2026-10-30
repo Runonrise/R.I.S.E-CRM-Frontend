@@ -503,36 +503,6 @@
   border: 0;
 }
 
-.rise-landing__video--empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-}
-
-.rise-landing__play {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  background: var(--rl-pink);
-}
-
-.rise-landing__play svg {
-  width: 28px;
-  height: 28px;
-  margin-left: 3px;
-  fill: var(--rl-on-accent);
-}
-
-.rise-landing__video-note {
-  color: var(--rl-text-2);
-  font-size: 15px;
-}
-
 /* Closing call to action */
 
 .rise-landing__section--cta {

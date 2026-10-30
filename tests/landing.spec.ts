@@ -106,25 +106,51 @@ test('every Launch App link points to /app', async ({ page }) => {
   }
 });
 
-test('Watch demo scrolls to the demo section', async ({ page }) => {
+// While VIDEO_URL is empty the demo is hidden and the hero's second button
+// goes to "How it works". Once a video is set, Watch demo goes to #demo.
+// These tests follow whichever state the build is in.
+async function hasDemo(page: Page) {
+  return (await page.locator('#demo').count()) > 0;
+}
+
+test('demo link and section match whether a video is set', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await openLanding(page);
-  const demo = page.locator('#demo');
-  await expect(demo).not.toBeInViewport();
-  await page.getByRole('link', { name: 'Watch demo' }).click();
-  await expect(demo).toBeInViewport();
-  await expect(page.getByRole('heading', { name: 'See it in action' })).toBeInViewport();
-  await expect(demo).toBeFocused();
-  // The heading sits below the sticky header, not under it.
-  const headerBottom = await page.locator('header').evaluate((h) => h.getBoundingClientRect().bottom);
-  const headingTop = await page.getByRole('heading', { name: 'See it in action' }).evaluate((h) => h.getBoundingClientRect().top);
-  expect(headingTop).toBeGreaterThanOrEqual(headerBottom);
+  const nav = page.getByRole('navigation', { name: 'Main' }).first();
+  if (await hasDemo(page)) {
+    await expect(nav.getByRole('link', { name: 'Demo' })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Watch demo' })).toBeVisible();
+  } else {
+    await expect(nav.getByRole('link', { name: 'Demo', exact: true })).toHaveCount(0);
+    await expect(page.getByRole('link', { name: 'Watch demo' })).toHaveCount(0);
+    await expect(page.getByText(/coming soon/i)).toHaveCount(0);
+    await expect(page.getByRole('main').getByRole('link', { name: 'See how it works' })).toBeVisible();
+  }
 });
 
-test('Watch demo works with reduced motion', async ({ page }) => {
+async function checkSecondaryButton(page: Page) {
+  const demo = await hasDemo(page);
+  const target = page.locator(demo ? '#demo' : '#how-it-works');
+  const heading = page.getByRole('heading', { name: demo ? 'See it in action' : 'How it works' });
+  await expect(heading).not.toBeInViewport();
+  await page.getByRole('main').getByRole('link', { name: demo ? 'Watch demo' : 'See how it works' }).click();
+  await expect(heading).toBeInViewport();
+  await expect(target).toBeFocused();
+  // The heading sits below the sticky header, not under it.
+  const headerBottom = await page.locator('header').evaluate((h) => h.getBoundingClientRect().bottom);
+  const headingTop = await heading.evaluate((h) => h.getBoundingClientRect().top);
+  expect(headingTop).toBeGreaterThanOrEqual(headerBottom);
+}
+
+test('hero secondary button scrolls to its section', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await openLanding(page);
+  await checkSecondaryButton(page);
+});
+
+test('hero secondary button works with reduced motion', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.setViewportSize({ width: 390, height: 844 });
   await openLanding(page);
-  await page.getByRole('link', { name: 'Watch demo' }).click();
-  await expect(page.getByRole('heading', { name: 'See it in action' })).toBeInViewport();
+  await checkSecondaryButton(page);
 });
