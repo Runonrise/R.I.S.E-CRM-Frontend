@@ -77,6 +77,22 @@ body {
   font-family: 'Inter', sans-serif;
 }
 
+/* Keyboard focus ring. Inputs that set outline:none inline keep their
+   own border-based focus. */
+:focus-visible {
+  outline: 2px solid var(--brand-bright);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* overflow:hidden lives on .app, not body: the authenticated shell is a
    deliberate fixed-height, no-page-scroll frame (see DESIGN.md), but Login
    renders directly into body before .app mounts and needs the document to
