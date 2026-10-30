@@ -33,6 +33,7 @@ const RELATIONSHIP_NODES = [
   { x: 290, y: 112, r: 4, strength: "light" },
 ];
 const HUB = { x: 68, y: 70 };
+const HUB_R = 9;
 
 function RelationshipMoment() {
   const lineRefs = useRef([]);
@@ -45,14 +46,27 @@ function RelationshipMoment() {
     const hub = hubRef.current;
     if (!hub || lines.length === 0 || nodes.length === 0) return undefined;
 
-    const targetR = nodes.map((node) => Number(node.getAttribute("r")));
+    // Target sizes come from the data, not the DOM. StrictMode runs this
+    // effect twice in dev, and by the second run gsap has already set r to 0.
+    const targetR = RELATIONSHIP_NODES.map((n) => n.r);
     const targetLineOpacity = RELATIONSHIP_NODES.map((n) => (n.strength === "light" ? 0.55 : 1));
+
+    // Reduced motion: skip the build-in and show the finished graph.
+    const reduceMotion = typeof window !== "undefined" && window.matchMedia
+      && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduceMotion) {
+      gsap.set(hub, { attr: { r: HUB_R } });
+      lines.forEach((line, i) => gsap.set(line, { opacity: targetLineOpacity[i] }));
+      nodes.forEach((node, i) => gsap.set(node, { attr: { r: targetR[i] } }));
+      return undefined;
+    }
+
     gsap.set(nodes, { attr: { r: 0 } });
     gsap.set(hub, { attr: { r: 0 } });
     gsap.set(lines, { opacity: 0 });
 
     const tl = gsap.timeline({ delay: 0.3 });
-    tl.to(hub, { attr: { r: 9 }, duration: 0.4, ease: "back.out(2)" });
+    tl.to(hub, { attr: { r: HUB_R }, duration: 0.4, ease: "back.out(2)" });
     lines.forEach((line, i) => {
       tl.to(line, { opacity: targetLineOpacity[i], duration: 0.35, ease: "power1.out" }, i === 0 ? "-=0.1" : "-=0.2");
     });
@@ -76,18 +90,33 @@ function RelationshipMoment() {
           opacity={n.strength === "light" ? 0.55 : 1}
         />
       ))}
-      <circle ref={hubRef} cx={HUB.x} cy={HUB.y} r="9" fill="var(--card)" stroke="var(--brand-bright)" strokeWidth="2" />
-      {RELATIONSHIP_NODES.map((n, i) => (
-        <circle
-          key={`node-${i}`}
-          ref={(el) => (nodeRefs.current[i] = el)}
-          cx={n.x} cy={n.y} r={n.r}
-          fill={n.strength === "light" ? "var(--card)" : "var(--brand-bright)"}
-          stroke="var(--brand-bright)"
-          strokeWidth={n.strength === "light" ? 1.5 : 0}
-          style={n.strength === "strong" ? { animation: "pulse-dot 2.4s infinite", transformBox: "fill-box", transformOrigin: "center" } : undefined}
-        />
-      ))}
+      <circle ref={hubRef} cx={HUB.x} cy={HUB.y} r={HUB_R} fill="var(--card)" stroke="var(--brand-bright)" strokeWidth="2" />
+      {RELATIONSHIP_NODES.map((n, i) => {
+        const hollow = n.strength === "light";
+        // Filled dots get a soft glow in the brand color; the hollow one
+        // stays faded so it reads as a weak tie.
+        const style = hollow
+          ? undefined
+          : {
+              filter: "drop-shadow(0 0 3px var(--brand-bright))",
+              ...(n.strength === "strong"
+                ? { animation: "pulse-dot 2.4s infinite", transformBox: "fill-box", transformOrigin: "center" }
+                : null),
+            };
+        return (
+          <circle
+            key={`node-${i}`}
+            data-testid="relationship-node"
+            ref={(el) => (nodeRefs.current[i] = el)}
+            cx={n.x} cy={n.y} r={n.r}
+            fill={hollow ? "var(--sidebar)" : "var(--brand-bright)"}
+            stroke="var(--brand-bright)"
+            strokeWidth={hollow ? 1.5 : 0}
+            opacity={hollow ? 0.7 : 1}
+            style={style}
+          />
+        );
+      })}
     </svg>
   );
 }
@@ -321,7 +350,7 @@ export default function Login({ API, onAuthenticated }) {
       background: "var(--bg)", padding: "24px", boxSizing: "border-box", fontFamily: "var(--font-body)",
     }}>
       <div style={{
-        display: "flex", width: "100%", maxWidth: 920, minHeight: showIllustration ? 560 : "auto",
+        display: "flex", width: "100%", maxWidth: "clamp(920px, 58vw, 1080px)", minHeight: showIllustration ? 560 : "auto",
         borderRadius: 16, overflow: "hidden", border: "1px solid var(--border)", boxShadow: "var(--shadow)",
         background: "var(--card)",
       }}>
@@ -331,8 +360,8 @@ export default function Login({ API, onAuthenticated }) {
             display: "flex", flexDirection: "column", justifyContent: "center", boxSizing: "border-box",
             borderRight: "1px solid var(--border)",
           }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 11, marginBottom: 40 }}>
-              <BrandLockup width={180} />
+            <div style={{ display: "flex", justifyContent: "center", marginBottom: 28 }}>
+              <BrandLockup width="min(100%, 320px)" style={{ minWidth: 200 }} />
             </div>
 
             <div style={{ fontFamily: "var(--font-display)", fontSize: 26, fontWeight: 700, color: "var(--text)", letterSpacing: -0.4, lineHeight: 1.15, marginBottom: 12 }}>
