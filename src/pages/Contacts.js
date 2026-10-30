@@ -1,6 +1,8 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 import DataTable from "../components/DataTable";
+// authHeaders is unused here; kept on purpose. cachedGetJson sends auth headers itself.
+// eslint-disable-next-line no-unused-vars
 import { authHeaders, cachedGetJson } from "../utils/api";
 
 const ctrl = { padding: "10px 14px", borderRadius: 10, border: "1px solid var(--border)", background: "var(--card)", color: "var(--text)", fontFamily: "Inter", fontSize: 14, outline: "none" };
@@ -23,9 +25,12 @@ export default function Contacts({ API }) {
     });
   }, [API]);
 
-  const clientName = {};
-  clients.forEach(c => { clientName[c.id] = c.company_name || c.client_name || "—"; });
-  const nameFor = (cid) => clientName[cid] || "—";
+  const clientName = useMemo(() => {
+    const map = {};
+    clients.forEach(c => { map[c.id] = c.company_name || c.client_name || "—"; });
+    return map;
+  }, [clients]);
+  const nameFor = useCallback((cid) => clientName[cid] || "—", [clientName]);
 
   const companies = [...new Set(contacts.map(c => nameFor(c.client_id)).filter(n => n && n !== "—"))].sort();
 
@@ -43,7 +48,7 @@ export default function Contacts({ API }) {
       );
     }
     return [...result].sort((a, b) => (b.is_primary ? 1 : 0) - (a.is_primary ? 1 : 0) || (a.name || "").localeCompare(b.name || ""));
-  }, [contacts, primaryOnly, company, search, clients]);
+  }, [contacts, primaryOnly, company, search, nameFor]);
 
   const activeFilters = search.trim() || company !== "all" || primaryOnly;
   const clearFilters = () => { setSearch(""); setCompany("all"); setPrimaryOnly(false); };

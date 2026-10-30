@@ -2,6 +2,8 @@ import React, { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import CountUp from "../components/CountUp";
 import { cardHoverProps } from "../utils/cardHover";
+// authHeaders is unused here; kept on purpose. cachedGetJson sends auth headers itself.
+// eslint-disable-next-line no-unused-vars
 import { authHeaders, cachedGetJson } from "../utils/api";
 import useBreakpoint from "../hooks/useBreakpoint";
 

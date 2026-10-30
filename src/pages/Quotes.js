@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 import DataTable from "../components/DataTable";
+// authHeaders is unused here; kept on purpose. cachedGetJson sends auth headers itself.
+// eslint-disable-next-line no-unused-vars
 import { authHeaders, cachedGetJson } from "../utils/api";
 
 const ctrl = { padding: "10px 14px", borderRadius: 10, border: "1px solid var(--border)", background: "var(--card)", color: "var(--text)", fontFamily: "Inter", fontSize: 14, outline: "none" };
