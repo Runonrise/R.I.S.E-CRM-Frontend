@@ -16,9 +16,9 @@ test.beforeEach(async ({ page }) => {
 
 async function expectLanding(page: Page) {
   await expect(page.locator('.rise-landing')).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'R.I.S.E CRM' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1, name: 'Spot churn before it happens' })).toBeVisible();
   await expect(page.getByRole('img', { name: 'Runonrise' })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Launch App' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Launch App' }).first()).toBeVisible();
 }
 
 // App.css defines --brand-bright on :root. It should only exist on /app.
@@ -28,7 +28,7 @@ async function crmStylesLoaded(page: Page) {
   );
 }
 
-test('"/" shows the placeholder landing page', async ({ page }) => {
+test('"/" shows the landing page', async ({ page }) => {
   await page.goto(BASE_URL + '/');
   await expectLanding(page);
   expect(await crmStylesLoaded(page)).toBe(false);
@@ -36,7 +36,7 @@ test('"/" shows the placeholder landing page', async ({ page }) => {
 
 test('Launch App goes to /app and shows the login screen', async ({ page }) => {
   await page.goto(BASE_URL + '/');
-  await page.getByRole('link', { name: 'Launch App' }).click();
+  await page.getByRole('link', { name: 'Launch App' }).first().click();
   await expect(page).toHaveURL(BASE_URL + '/app');
   await expect(page.getByRole('button', { name: 'Sign in' })).toBeVisible();
   expect(await crmStylesLoaded(page)).toBe(true);
@@ -44,7 +44,7 @@ test('Launch App goes to /app and shows the login screen', async ({ page }) => {
 
 test('going Back from /app does not carry CRM styles to "/"', async ({ page }) => {
   await page.goto(BASE_URL + '/');
-  await page.getByRole('link', { name: 'Launch App' }).click();
+  await page.getByRole('link', { name: 'Launch App' }).first().click();
   await expect(page.getByRole('button', { name: 'Sign in' })).toBeVisible();
   await page.goBack();
   await expect(page).toHaveURL(BASE_URL + '/');
