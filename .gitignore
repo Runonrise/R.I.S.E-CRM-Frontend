@@ -13,3 +13,6 @@ build/
 screenshots/
 
 reference/
+
+# Demo video (large files are hosted or added at ship time)
+public/demo/*.mp4
