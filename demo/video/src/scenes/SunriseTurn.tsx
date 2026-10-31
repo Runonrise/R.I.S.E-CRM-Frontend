@@ -15,6 +15,11 @@ import {sec} from '../timing';
 
 const LOGO_H = 470;
 const LOGO_W = Math.round((LOGO_H * 1856) / 1368);
+// The PNG has ~80px of transparent padding, so the wordmark ink starts
+// about 27px below LOGO_TOP. This puts it near y 220, under the heading.
+const LOGO_TOP = 192;
+// Height of the soft edge on the upward reveal, as a % of the logo box.
+const FEATHER = 28;
 
 export const SunriseTurn: React.FC = () => {
   const frame = useCurrentFrame();
@@ -33,6 +38,11 @@ export const SunriseTurn: React.FC = () => {
     durationInFrames: sec(0.9),
   });
 
+  // Soft upward wipe: a feathered edge rises from the bottom like the sun.
+  const edge = logo * (100 + FEATHER);
+  const reveal =
+    logo >= 0.999 ? 'none' : `linear-gradient(to top, black ${edge - FEATHER}%, transparent ${edge}%)`;
+
   return (
     <AbsoluteFill style={{background: C.obsidian}}>
       <Backdrop />
@@ -42,45 +52,34 @@ export const SunriseTurn: React.FC = () => {
           position: 'absolute',
           left: 0,
           right: 0,
-          top: 100,
+          top: 96,
           display: 'flex',
           justifyContent: 'center',
         }}
       >
-        <WordReveal text="Meet R.I.S.E." size={96} start={0.87} stagger={0.2} weight={700} />
+        <WordReveal text="Meet R.I.S.E." size={64} start={0.87} stagger={0.2} weight={700} />
       </div>
+      {/* Outer layer carries the glow and is never clipped, so no box edges. */}
       <div
         style={{
           position: 'absolute',
           left: '50%',
-          top: 250,
-          width: LOGO_W * 1.6,
-          height: LOGO_H * 1.3,
-          marginLeft: -(LOGO_W * 0.8),
-          marginTop: -(LOGO_H * 0.15),
-          background: `radial-gradient(ellipse at center, ${C.violet}55 0%, ${C.pink}2a 35%, transparent 68%)`,
-          opacity: logo * 0.9,
-          filter: 'blur(30px)',
-        }}
-      />
-      <div
-        style={{
-          position: 'absolute',
-          left: '50%',
-          top: 250,
+          top: LOGO_TOP,
           width: LOGO_W,
           height: LOGO_H,
           marginLeft: -LOGO_W / 2,
           opacity: logo,
-          clipPath: `inset(${(1 - logo) * 100}% 0 0 0)`,
           transform: `translateY(${(1 - logo) * 36}px)`,
-          filter: `drop-shadow(0 0 36px ${C.pink}55)`,
+          filter: `drop-shadow(0 0 16px ${C.pink}40)`,
         }}
       >
-        <Img
-          src={staticFile('brand/rise-crm-lockup-for-dark.png')}
-          style={{width: LOGO_W, height: LOGO_H}}
-        />
+        {/* Inner layer does the reveal; the glow follows its soft edge. */}
+        <div style={{width: LOGO_W, height: LOGO_H, maskImage: reveal, WebkitMaskImage: reveal}}>
+          <Img
+            src={staticFile('brand/rise-crm-lockup-for-dark.png')}
+            style={{width: LOGO_W, height: LOGO_H, display: 'block'}}
+          />
+        </div>
       </div>
     </AbsoluteFill>
   );
