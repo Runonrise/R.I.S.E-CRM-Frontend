@@ -24,7 +24,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "demo:capture": "playwright test --config demo/playwright.demo.config.ts"
+    "demo:capture": "playwright test --config demo/playwright.demo.config.ts",
+    "demo:preview": "npm --prefix demo/video run studio",
+    "demo:render": "npm --prefix demo/video run render:slice"
   },
   "eslintConfig": {
     "extends": [

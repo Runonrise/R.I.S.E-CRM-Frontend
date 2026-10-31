@@ -7,7 +7,7 @@ Backend is a separate Flask repo on Render. Do not touch API calls unless told t
 - Commit often. Push only branches named in this file, never main.
 - Never push to main. Deploying to Vercel happens last, and only when I say so.
 - ../R.I.S.E-CRM-Baseline is a read-only memoir of the old RetainIQ version. Never edit, delete, or add files there. Copy out of it only when I ask.
-- Branches: thematic-overhaul, professional-website.
+- Branches: thematic-overhaul, professional-website, demo-video.
 
 ## Brand
 - Product name: R.I.S.E CRM (formerly RetainIQ). Never show "RetainIQ" in the UI.
