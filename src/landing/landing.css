@@ -90,13 +90,9 @@
 
 .rise-landing__container {
   width: 100%;
-  max-width: 1120px;
+  max-width: 1200px;
   margin-inline: auto;
   padding-inline: var(--rl-gutter);
-}
-
-.rise-landing__container--wide {
-  max-width: 1240px;
 }
 
 /* Skip link */
@@ -138,14 +134,19 @@
   cursor: pointer;
 }
 
+.rise-landing__btn:active {
+  transform: translateY(1px);
+}
+
 .rise-landing__btn svg {
   width: 16px;
   height: 16px;
   fill: currentColor;
 }
 
+/* 44px tall on touch screens, 40px once the desktop nav shows. */
 .rise-landing__btn--small {
-  min-height: 40px;
+  min-height: 44px;
   padding: 0 18px;
   font-size: 15px;
 }
@@ -157,6 +158,10 @@
 
 .rise-landing__btn--primary:hover {
   background: var(--rl-pink-soft);
+}
+
+.rise-landing__btn--primary:active {
+  background: var(--rl-pink);
 }
 
 .rise-landing__btn--secondary {
@@ -194,7 +199,7 @@
   justify-content: space-between;
   gap: 24px;
   height: var(--rl-header-h);
-  max-width: 1240px;
+  max-width: 1200px;
   margin-inline: auto;
   padding-inline: var(--rl-gutter);
 }
@@ -207,13 +212,18 @@
 
 .rise-landing__brand img {
   width: auto;
-  height: 28px;
+  height: 24px;
+}
+
+.rise-landing__bar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .rise-landing__nav {
   display: none;
-  align-items: center;
-  gap: 32px;
+  margin-left: auto;
 }
 
 .rise-landing__nav ul {
@@ -231,7 +241,9 @@
 }
 
 .rise-landing__nav ul a:hover,
-.rise-landing__menu ul a:hover {
+.rise-landing__menu ul a:hover,
+.rise-landing__nav ul a:active,
+.rise-landing__menu ul a:active {
   color: var(--rl-text);
 }
 
@@ -239,7 +251,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  min-height: 40px;
+  min-height: 44px;
   padding: 0 14px 0 10px;
   border: 1px solid var(--rl-outline);
   border-radius: 999px;
@@ -258,8 +270,33 @@
   stroke-linecap: round;
 }
 
-.rise-landing__menu-button:hover {
+.rise-landing__menu-button:hover,
+.rise-landing__menu-button:active {
   background: var(--rl-surface);
+}
+
+/* On the narrowest phones the button keeps its name for screen readers
+   but shows only the icon, so the logo and Launch App still fit. */
+@media (max-width: 379px) {
+  .rise-landing {
+    --rl-gutter: 16px;
+  }
+  .rise-landing__bar {
+    gap: 12px;
+  }
+  .rise-landing__menu-button {
+    min-width: 44px;
+    padding: 0;
+    justify-content: center;
+  }
+  .rise-landing__menu-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
 }
 
 /* The mobile menu drops over the page instead of pushing it down, so
@@ -295,7 +332,13 @@
 
 @media (min-width: 768px) {
   .rise-landing__nav {
-    display: flex;
+    display: block;
+  }
+  .rise-landing__bar-actions {
+    margin-left: 8px;
+  }
+  .rise-landing__btn--small {
+    min-height: 40px;
   }
   .rise-landing__menu-button,
   .rise-landing__menu {
@@ -311,6 +354,14 @@
 
 .rise-landing__hero-text {
   text-align: center;
+}
+
+.rise-landing__kicker {
+  margin-bottom: 20px;
+  color: var(--rl-text-2);
+  font-family: var(--rl-font-display);
+  font-size: 1rem;
+  font-weight: 500;
 }
 
 .rise-landing__hero h1 {
@@ -338,6 +389,14 @@
   margin-top: 36px;
 }
 
+.rise-landing__note {
+  max-width: 36rem;
+  margin: 16px auto 0;
+  color: var(--rl-text-3);
+  font-size: 14px;
+  text-wrap: balance;
+}
+
 .rise-landing__shot {
   margin-top: 64px;
 }
@@ -353,8 +412,19 @@
 .rise-landing__frame img {
   width: 100%;
   height: auto;
-  aspect-ratio: 2240 / 1400;
+  aspect-ratio: 741 / 544;
   border-radius: 10px;
+}
+
+@media (min-width: 768px) {
+  .rise-landing__frame {
+    -webkit-mask-image: linear-gradient(to bottom, black 72%, transparent);
+    mask-image: linear-gradient(to bottom, black 72%, transparent);
+  }
+  .rise-landing__frame img {
+    aspect-ratio: 1848 / 1152;
+    border-radius: 10px 10px 0 0;
+  }
 }
 
 .rise-landing__shot figcaption {
@@ -442,6 +512,13 @@
   .rise-landing__cards {
     grid-template-columns: repeat(2, 1fr);
   }
+  .rise-landing__card {
+    display: grid;
+    grid-row: span 3;
+    grid-template-rows: subgrid;
+    row-gap: 0;
+    align-content: start;
+  }
 }
 
 @media (min-width: 1100px) {
@@ -472,7 +549,7 @@
   margin-bottom: 20px;
   border: 1px solid var(--rl-violet-line);
   border-radius: 50%;
-  color: var(--rl-pink-soft);
+  color: var(--rl-text);
   font-family: var(--rl-font-display);
   font-weight: 600;
   font-size: 16px;
@@ -559,7 +636,7 @@
     --rl-gutter: 32px;
   }
   .rise-landing__brand img {
-    height: 30px;
+    height: 28px;
   }
   .rise-landing__hero {
     padding-top: 112px;

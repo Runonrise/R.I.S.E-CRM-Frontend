@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
-import runonriseLockup from "../assets/brand/runonrise-lockup-for-dark.png";
-import dashboardShot from "../assets/landing/dashboard-dark.webp";
+import runonriseLockup from "../assets/brand/runonrise-lockup-for-dark-header.webp";
+import dashboardWide from "../assets/landing/dashboard-dark-wide.webp";
+import dashboardMobile from "../assets/landing/dashboard-dark-mobile.webp";
 import "./landing.css";
 
 // Demo video. Accepts a YouTube embed link
@@ -142,8 +143,16 @@ export default function LandingPage() {
         document.getElementById("rise-landing-menu-button")?.focus();
       }
     };
+    // A tap or click anywhere outside the header closes the menu too.
+    const onPointer = (e) => {
+      if (!e.target.closest(".rise-landing__header")) setMenuOpen(false);
+    };
     document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
+    document.addEventListener("pointerdown", onPointer);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("pointerdown", onPointer);
+    };
   }, [menuOpen]);
 
   return (
@@ -153,7 +162,7 @@ export default function LandingPage() {
       <header className="rise-landing__header">
         <div className="rise-landing__bar">
           <a className="rise-landing__brand" href="/" aria-label="Runonrise home">
-            <img src={runonriseLockup} alt="Runonrise" width="2343" height="550" />
+            <img src={runonriseLockup} alt="Runonrise" width="383" height="90" />
           </a>
 
           <nav className="rise-landing__nav" aria-label="Main">
@@ -164,24 +173,28 @@ export default function LandingPage() {
                 </li>
               ))}
             </ul>
+          </nav>
+
+          {/* Launch App stays in the bar at every width, so it is one tap
+              away anywhere on the page. */}
+          <div className="rise-landing__bar-actions">
             <a className="rise-landing__btn rise-landing__btn--primary rise-landing__btn--small" href={APP_URL}>
               Launch App
             </a>
-          </nav>
-
-          <button
-            id="rise-landing-menu-button"
-            className="rise-landing__menu-button"
-            type="button"
-            aria-expanded={menuOpen}
-            aria-controls="rise-landing-menu"
-            onClick={() => setMenuOpen((o) => !o)}
-          >
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              {menuOpen ? <path d="M6 6l12 12M18 6L6 18" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
-            </svg>
-            Menu
-          </button>
+            <button
+              id="rise-landing-menu-button"
+              className="rise-landing__menu-button"
+              type="button"
+              aria-expanded={menuOpen}
+              aria-controls="rise-landing-menu"
+              onClick={() => setMenuOpen((o) => !o)}
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                {menuOpen ? <path d="M6 6l12 12M18 6L6 18" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
+              </svg>
+              <span className="rise-landing__menu-label">Menu</span>
+            </button>
+          </div>
         </div>
 
         <nav
@@ -197,15 +210,13 @@ export default function LandingPage() {
               </li>
             ))}
           </ul>
-          <a className="rise-landing__btn rise-landing__btn--primary" href={APP_URL}>
-            Launch App
-          </a>
         </nav>
       </header>
 
       <main id="main" tabIndex={-1}>
         <section className="rise-landing__hero" aria-labelledby="hero-title">
           <div className="rise-landing__container rise-landing__hero-text">
+            <p className="rise-landing__kicker">R.I.S.E CRM by Runonrise</p>
             <h1 id="hero-title">Spot churn before it happens</h1>
             <p className="rise-landing__lede">
               R.I.S.E CRM scores the churn risk of every account you manage and
@@ -235,19 +246,29 @@ export default function LandingPage() {
                 </a>
               )}
             </div>
+            <p className="rise-landing__note">
+              Launch App opens the sign-in page. New here? You can create an
+              account there.
+            </p>
           </div>
 
-          <div className="rise-landing__container rise-landing__container--wide">
+          <div className="rise-landing__container">
             <figure className="rise-landing__shot">
+              {/* Two crops of the same screenshot: the full dashboard on
+                  wider screens, and just the client total and its risk split
+                  on phones, where the full view would be too small to read. */}
               <div className="rise-landing__frame">
-                <img
-                  src={dashboardShot}
-                  alt="The R.I.S.E CRM dashboard: client totals, accounts expiring in 90 days, critical accounts, value at risk, and a list of clients with their renewal status."
-                  width="2240"
-                  height="1400"
-                  fetchPriority="high"
-                  decoding="async"
-                />
+                <picture>
+                  <source media="(max-width: 767px)" srcSet={dashboardMobile} width="741" height="544" />
+                  <img
+                    src={dashboardWide}
+                    alt="The R.I.S.E CRM dashboard with sample data: total clients split by churn risk into critical, at-risk, and healthy, with renewal totals and a list of clients."
+                    width="1848"
+                    height="1152"
+                    fetchPriority="high"
+                    decoding="async"
+                  />
+                </picture>
               </div>
               <figcaption>The R.I.S.E CRM dashboard, shown with sample data.</figcaption>
             </figure>
