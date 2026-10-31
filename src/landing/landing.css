@@ -22,6 +22,13 @@
   --rl-tint:          #ECEAF5;
   --rl-on-accent:     #0A0910;
   --rl-shadow:        0 24px 60px -28px rgba(0, 0, 0, 0.75);
+  --rl-sunrise:       linear-gradient(120deg, #FFC83D, #FF7A3D 25%, #EC3B8B 50%, #8B2BE2 75%, #3B3FD6);
+  --rl-scrim:         rgba(10, 9, 16, 0.78); /* obsidian, for overlays */
+  --rl-glow:          0 0 48px -12px rgba(236, 59, 139, 0.45), 0 0 96px -24px rgba(139, 43, 226, 0.5);
+  --rl-poster-bg:
+    radial-gradient(120% 90% at 10% 0%, rgba(255, 122, 61, 0.16), transparent 55%),
+    radial-gradient(110% 90% at 100% 100%, rgba(139, 43, 226, 0.26), transparent 60%),
+    #15131F;
 
   --rl-font-body:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --rl-font-display: 'Space Grotesk', 'Inter', -apple-system, sans-serif;
@@ -166,6 +173,7 @@
 
 .rise-landing__btn--secondary {
   border-color: var(--rl-outline);
+  background: transparent;
   color: var(--rl-text);
 }
 
@@ -562,22 +570,204 @@
   }
 }
 
-/* Demo */
+/* Demo card: the poster with a play button. Opens the demo modal. */
 
-.rise-landing__video {
+.rise-landing__poster {
   position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
   aspect-ratio: 16 / 9;
+  padding: 0;
   overflow: hidden;
-  border: 1px solid var(--rl-border);
+  border: 1px solid var(--rl-violet-line);
   border-radius: 20px;
-  background: var(--rl-surface);
+  background: var(--rl-poster-bg);
+  box-shadow: var(--rl-shadow);
+  color: var(--rl-text);
+  font: inherit;
+  cursor: pointer;
 }
 
-.rise-landing__video iframe,
-.rise-landing__video video {
+.rise-landing__poster img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Darkens the poster a little so the button reads on any frame. */
+.rise-landing__poster::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, var(--rl-scrim), transparent 70%);
+  opacity: 0.6;
+}
+
+.rise-landing__poster-cta {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 20px 6px 6px;
+  border: 1px solid var(--rl-border-strong);
+  border-radius: 999px;
+  background: var(--rl-scrim);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* Tint disc with a thin sunrise ring. */
+.rise-landing__poster-disc {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  background:
+    linear-gradient(var(--rl-tint), var(--rl-tint)) padding-box,
+    var(--rl-sunrise) border-box;
+  color: var(--rl-on-accent);
+}
+
+.rise-landing__poster-disc svg {
+  width: 20px;
+  height: 20px;
+  margin-left: 2px;
+  fill: currentColor;
+}
+
+.rise-landing__poster:hover .rise-landing__poster-cta {
+  border-color: var(--rl-outline);
+  background: var(--rl-surface-2);
+}
+
+@media (min-width: 768px) {
+  .rise-landing__poster-disc {
+    width: 64px;
+    height: 64px;
+  }
+  .rise-landing__poster-disc svg {
+    width: 26px;
+    height: 26px;
+  }
+  .rise-landing__poster-cta {
+    gap: 16px;
+    padding-right: 26px;
+    font-size: 17px;
+  }
+}
+
+/* Demo modal. The dialog itself covers the screen and is the dimmed,
+   blurred backdrop, so a click on it (outside the panel) closes it. */
+
+.rise-landing__modal[open] {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: var(--rl-gutter);
+  overflow: auto;
+  border: 0;
+  background: var(--rl-scrim);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  color: var(--rl-text);
+}
+
+.rise-landing__modal::backdrop {
+  background: transparent;
+}
+
+/* As wide as the screen allows, but short enough that the 16:9 player and
+   its title bar always fit in the window. */
+.rise-landing__modal-panel {
+  width: min(1120px, 100%, calc((100vh - 128px) * 16 / 9));
+  width: min(1120px, 100%, calc((100dvh - 128px) * 16 / 9));
+}
+
+.rise-landing__modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.rise-landing__modal-head h2 {
+  font-size: 1.0625rem;
+  line-height: 1.3;
+}
+
+.rise-landing__modal-close {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--rl-outline);
+  border-radius: 50%;
+  background: var(--rl-bg);
+  color: var(--rl-text);
+  cursor: pointer;
+}
+
+.rise-landing__modal-close:hover {
+  border-color: var(--rl-text-2);
+  background: var(--rl-surface-2);
+}
+
+.rise-landing__modal-close svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+/* One pixel of sunrise gradient around the player, with a soft glow. */
+.rise-landing__modal-frame {
+  padding: 1px;
+  border-radius: 17px;
+  background: var(--rl-sunrise);
+  box-shadow: var(--rl-glow), var(--rl-shadow);
+}
+
+.rise-landing__modal-player {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 16px;
+  background: var(--rl-bg);
+}
+
+.rise-landing__modal-player video,
+.rise-landing__modal-player iframe {
   width: 100%;
   height: 100%;
   border: 0;
+  background: var(--rl-bg);
+}
+
+@media (min-width: 768px) {
+  .rise-landing__modal-head h2 {
+    font-size: 1.1875rem;
+  }
 }
 
 /* Closing call to action */
@@ -672,4 +862,29 @@
   .rise-landing__menu ul a {
     transition: background-color 160ms ease-out, border-color 160ms ease-out, color 160ms ease-out;
   }
+  .rise-landing__modal-close,
+  .rise-landing__poster-cta {
+    transition: background-color 160ms ease-out, border-color 160ms ease-out;
+  }
+  .rise-landing__poster-disc {
+    transition: transform 200ms ease-out;
+  }
+  .rise-landing__poster:hover .rise-landing__poster-disc {
+    transform: scale(1.06);
+  }
+  /* The modal fades in and the player rises into place. */
+  .rise-landing__modal[open] {
+    animation: rise-landing-fade 200ms ease-out;
+  }
+  .rise-landing__modal-panel {
+    animation: rise-landing-pop 260ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+}
+
+@keyframes rise-landing-fade {
+  from { opacity: 0; }
+}
+
+@keyframes rise-landing-pop {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
 }

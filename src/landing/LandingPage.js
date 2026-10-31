@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import runonriseLockup from "../assets/brand/runonrise-lockup-for-dark-header.webp";
 import dashboardWide from "../assets/landing/dashboard-dark-wide.webp";
 import dashboardMobile from "../assets/landing/dashboard-dark-mobile.webp";
@@ -10,6 +10,11 @@ import "./landing.css";
 // hero's second button points to "How it works" instead.
 const VIDEO_URL = "";
 const HAS_VIDEO = VIDEO_URL.trim() !== "";
+const IS_VIDEO_FILE = /\.(mp4|webm)(\?|#|$)/i.test(VIDEO_URL);
+
+// Still image for the demo card and the player. If it is missing, the card
+// shows a plain dark panel and the player goes without it.
+const POSTER_URL = "/demo/rise-demo-poster.jpg";
 
 // Plain links on purpose: a full page load into /app means the CRM styles
 // never get added to this page, even after pressing Back.
@@ -94,31 +99,183 @@ function goToSection(id) {
   } catch (e) {}
 }
 
-function DemoVideo() {
-  if (/\.(mp4|webm)(\?|#|$)/i.test(VIDEO_URL)) {
-    return (
-      <div className="rise-landing__video">
-        <video src={VIDEO_URL} controls preload="metadata" playsInline>
-          Your browser cannot play this video.
-        </video>
-      </div>
-    );
-  }
+function withAutoplay(url) {
+  return url + (url.includes("?") ? "&" : "?") + "autoplay=1";
+}
+
+// The demo player in a modal dialog. The player only exists while the
+// dialog is open, so nothing downloads until someone asks to watch.
+// showModal() makes the rest of the page inert, which keeps keyboard focus
+// inside the dialog.
+function DemoModal({ open, onClose, poster, returnFocusRef }) {
+  const dialogRef = useRef(null);
+  const videoRef = useRef(null);
+  const pressedBackdrop = useRef(false);
+
+  const requestClose = useCallback(() => {
+    const video = videoRef.current;
+    if (video) {
+      video.pause();
+      try {
+        video.currentTime = 0;
+      } catch (e) {}
+    }
+    onClose();
+  }, [onClose]);
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!open || !dialog) return undefined;
+
+    // Lock page scroll, and pad for the scrollbar so the page does not shift.
+    const root = document.documentElement;
+    const prevOverflow = root.style.overflow;
+    const prevPadding = root.style.paddingRight;
+    const scrollbar = window.innerWidth - root.clientWidth;
+    root.style.overflow = "hidden";
+    if (scrollbar > 0) root.style.paddingRight = scrollbar + "px";
+
+    // The button that opened the modal gets focus back when it closes.
+    const opener = returnFocusRef.current;
+    if (!dialog.open) dialog.showModal();
+
+    const video = videoRef.current;
+    if (video) {
+      // Focus on the player, so Space plays and pauses right away.
+      video.focus();
+      if (!prefersReducedMotion()) video.play().catch(() => {});
+    }
+
+    return () => {
+      if (video) video.pause();
+      if (dialog.open) dialog.close();
+      root.style.overflow = prevOverflow;
+      root.style.paddingRight = prevPadding;
+      if (opener && opener.isConnected) opener.focus({ preventScroll: true });
+    };
+  }, [open, returnFocusRef]);
+
   return (
-    <div className="rise-landing__video">
-      <iframe
-        src={VIDEO_URL}
-        title="R.I.S.E CRM demo video"
-        loading="lazy"
-        allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-        allowFullScreen
-      />
-    </div>
+    <dialog
+      ref={dialogRef}
+      className="rise-landing__modal"
+      aria-modal="true"
+      aria-labelledby="demo-modal-title"
+      // Esc: close through React state so cleanup runs the same way every time.
+      onCancel={(e) => {
+        e.preventDefault();
+        requestClose();
+      }}
+      // In case the browser closes the dialog on its own.
+      onClose={onClose}
+      // A click on the dimmed area around the player closes it. Both the
+      // press and the release must land there, so a drag that starts on
+      // the player does not count.
+      onPointerDown={(e) => {
+        pressedBackdrop.current = e.target === e.currentTarget;
+      }}
+      onClick={(e) => {
+        if (pressedBackdrop.current && e.target === e.currentTarget) requestClose();
+        pressedBackdrop.current = false;
+      }}
+    >
+      {open && (
+        <div className="rise-landing__modal-panel">
+          <div className="rise-landing__modal-head">
+            <h2 id="demo-modal-title">R.I.S.E CRM demo</h2>
+            <button
+              type="button"
+              className="rise-landing__modal-close"
+              aria-label="Close video"
+              onClick={requestClose}
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+            </button>
+          </div>
+          <div className="rise-landing__modal-frame">
+            <div className="rise-landing__modal-player">
+              {IS_VIDEO_FILE ? (
+                <video
+                  ref={videoRef}
+                  src={VIDEO_URL}
+                  poster={poster}
+                  controls
+                  playsInline
+                  preload="none"
+                >
+                  Your browser cannot play this video.
+                </video>
+              ) : (
+                <iframe
+                  src={prefersReducedMotion() ? VIDEO_URL : withAutoplay(VIDEO_URL)}
+                  title="R.I.S.E CRM demo video"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                  allowFullScreen
+                />
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+    </dialog>
+  );
+}
+
+// The demo section's card: the poster with a play button over it.
+function DemoCard({ onOpen, posterState, onPosterState }) {
+  const showPoster = POSTER_URL !== "" && posterState !== "missing";
+  return (
+    <button
+      type="button"
+      className="rise-landing__poster"
+      aria-haspopup="dialog"
+      onClick={onOpen}
+    >
+      {showPoster && (
+        <img
+          src={POSTER_URL}
+          alt=""
+          width="1280"
+          height="720"
+          loading="lazy"
+          decoding="async"
+          onLoad={() => onPosterState("ok")}
+          onError={() => onPosterState("missing")}
+        />
+      )}
+      <span className="rise-landing__poster-cta">
+        <span className="rise-landing__poster-disc" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M9 6.5v11l9-5.5z" /></svg>
+        </span>
+        Play demo
+      </span>
+    </button>
   );
 }
 
 export default function LandingPage() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [demoOpen, setDemoOpen] = useState(false);
+  // "unknown" until the poster loads or fails, so the player only gets a
+  // poster that is known to exist.
+  const [posterState, setPosterState] = useState("unknown");
+  const demoOpenerRef = useRef(null);
+
+  const openDemo = useCallback(
+    (e) => {
+      demoOpenerRef.current = e.currentTarget;
+      if (posterState === "unknown" && POSTER_URL) {
+        const img = new Image();
+        img.onload = () => setPosterState("ok");
+        img.onerror = () => setPosterState("missing");
+        img.src = POSTER_URL;
+      }
+      setDemoOpen(true);
+    },
+    [posterState]
+  );
+
+  const closeDemo = useCallback(() => setDemoOpen(false), []);
 
   const onSectionLink = useCallback((e, id) => {
     e.preventDefault();
@@ -228,14 +385,15 @@ export default function LandingPage() {
                 Launch App
               </a>
               {HAS_VIDEO ? (
-                <a
+                <button
+                  type="button"
                   className="rise-landing__btn rise-landing__btn--secondary"
-                  href="#demo"
-                  onClick={(e) => onSectionLink(e, "demo")}
+                  aria-haspopup="dialog"
+                  onClick={openDemo}
                 >
                   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6.5v11l9-5.5z" /></svg>
                   Watch demo
-                </a>
+                </button>
               ) : (
                 <a
                   className="rise-landing__btn rise-landing__btn--secondary"
@@ -322,7 +480,7 @@ export default function LandingPage() {
                 <h2 id="demo-title">See it in action</h2>
                 <p>A short walkthrough of R.I.S.E CRM and how it helps your team keep customers.</p>
               </div>
-              <DemoVideo />
+              <DemoCard onOpen={openDemo} posterState={posterState} onPosterState={setPosterState} />
             </div>
           </section>
         )}
@@ -347,6 +505,15 @@ export default function LandingPage() {
           <p className="rise-landing__footer-note">Not yet an official release</p>
         </div>
       </footer>
+
+      {HAS_VIDEO && (
+        <DemoModal
+          open={demoOpen}
+          onClose={closeDemo}
+          poster={posterState === "ok" ? POSTER_URL : undefined}
+          returnFocusRef={demoOpenerRef}
+        />
+      )}
     </div>
   );
 }

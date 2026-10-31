@@ -39,7 +39,10 @@ async function trackLayoutShift(page: Page) {
 async function openLanding(page: Page) {
   await page.goto(BASE_URL + '/');
   await expect(page.getByRole('heading', { level: 1, name: 'Spot churn before it happens' })).toBeVisible();
-  await page.waitForFunction(() => Array.from(document.images).every((i) => i.complete));
+  // Lazy images below the fold (the demo poster) load later, so skip them.
+  await page.waitForFunction(() =>
+    Array.from(document.images).every((i) => i.complete || i.loading === 'lazy')
+  );
   await page.evaluate(() => document.fonts.ready);
 }
 
@@ -107,7 +110,8 @@ test('every Launch App link points to /app', async ({ page }) => {
 });
 
 // While VIDEO_URL is empty the demo is hidden and the hero's second button
-// goes to "How it works". Once a video is set, Watch demo goes to #demo.
+// goes to "How it works". Once a video is set, Watch demo and the demo
+// section's card both open the same video modal.
 // These tests follow whichever state the build is in.
 async function hasDemo(page: Page) {
   return (await page.locator('#demo').count()) > 0;
@@ -119,7 +123,8 @@ test('demo link and section match whether a video is set', async ({ page }) => {
   const nav = page.getByRole('navigation', { name: 'Main' }).first();
   if (await hasDemo(page)) {
     await expect(nav.getByRole('link', { name: 'Demo' })).toBeVisible();
-    await expect(page.getByRole('link', { name: 'Watch demo' })).toBeVisible();
+    await expect(page.getByRole('main').getByRole('button', { name: 'Watch demo' })).toBeVisible();
+    await expect(page.locator('#demo').getByRole('button', { name: 'Play demo' })).toBeVisible();
   } else {
     await expect(nav.getByRole('link', { name: 'Demo', exact: true })).toHaveCount(0);
     await expect(page.getByRole('link', { name: 'Watch demo' })).toHaveCount(0);
@@ -128,12 +133,53 @@ test('demo link and section match whether a video is set', async ({ page }) => {
   }
 });
 
+// The hero button and the section card open one shared modal. Esc, the X,
+// and a click outside each close it, and focus goes back to the opener.
+async function checkDemoModal(page: Page) {
+  const main = page.getByRole('main');
+  const dialog = page.getByRole('dialog', { name: 'R.I.S.E CRM demo' });
+  const hero = main.getByRole('button', { name: 'Watch demo' });
+  const card = page.locator('#demo').getByRole('button', { name: 'Play demo' });
+  const player = page.locator('.rise-landing__modal video, .rise-landing__modal iframe');
+
+  // No player, so nothing downloads, until the modal opens.
+  await expect(player).toHaveCount(0);
+
+  await hero.click();
+  await expect(dialog).toBeVisible();
+  await expect(dialog).toHaveAttribute('aria-modal', 'true');
+  await expect(player).toHaveCount(1);
+  await expect(page.locator('html')).toHaveCSS('overflow', 'hidden');
+  await page.keyboard.press('Escape');
+  await expect(dialog).toBeHidden();
+  await expect(player).toHaveCount(0);
+  await expect(hero).toBeFocused();
+  await expect(page.locator('html')).not.toHaveCSS('overflow', 'hidden');
+
+  await card.scrollIntoViewIfNeeded();
+  await card.click();
+  await expect(dialog).toBeVisible();
+  await expect(page.locator('dialog')).toHaveCount(1);
+  await dialog.getByRole('button', { name: 'Close video' }).click();
+  await expect(dialog).toBeHidden();
+  await expect(card).toBeFocused();
+
+  await card.click();
+  await expect(dialog).toBeVisible();
+  await page.mouse.click(4, 4);
+  await expect(dialog).toBeHidden();
+  await expect(card).toBeFocused();
+}
+
 async function checkSecondaryButton(page: Page) {
-  const demo = await hasDemo(page);
-  const target = page.locator(demo ? '#demo' : '#how-it-works');
-  const heading = page.getByRole('heading', { name: demo ? 'See it in action' : 'How it works' });
+  if (await hasDemo(page)) {
+    await checkDemoModal(page);
+    return;
+  }
+  const target = page.locator('#how-it-works');
+  const heading = page.getByRole('heading', { name: 'How it works' });
   await expect(heading).not.toBeInViewport();
-  await page.getByRole('main').getByRole('link', { name: demo ? 'Watch demo' : 'See how it works' }).click();
+  await page.getByRole('main').getByRole('link', { name: 'See how it works' }).click();
   await expect(heading).toBeInViewport();
   await expect(target).toBeFocused();
   // The heading sits below the sticky header, not under it.
@@ -142,7 +188,7 @@ async function checkSecondaryButton(page: Page) {
   expect(headingTop).toBeGreaterThanOrEqual(headerBottom);
 }
 
-test('hero secondary button scrolls to its section', async ({ page }) => {
+test('hero secondary button scrolls to its section or opens the demo', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await openLanding(page);
   await checkSecondaryButton(page);
