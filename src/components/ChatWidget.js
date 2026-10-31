@@ -3,6 +3,14 @@ import { AnimatePresence, motion } from "framer-motion";
 import { authHeaders } from "../utils/api";
 import useBreakpoint from "../hooks/useBreakpoint";
 
+// Turns **company name** into bold text. Safe: builds React nodes, never raw HTML.
+function renderRichText(text) {
+  const parts = String(text || "").split(/\*\*(.+?)\*\*/g);
+  return parts.map((part, i) =>
+    i % 2 === 1 ? <strong key={i} style={{ fontWeight: 700 }}>{part}</strong> : part
+  );
+}
+
 const ICONS = {
   sparkle: (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -317,7 +325,7 @@ export default function ChatWidget({ API, isGuest }) {
                         Searched the web for “{m.searchedFor}”
                       </div>
                     )}
-                    <div style={{ whiteSpace: "pre-wrap" }}>{m.content}</div>
+                    <div style={{ whiteSpace: "pre-wrap" }}>{renderRichText(m.content)}</div>
                     {m.sources && m.sources.length > 0 && (
                       <div style={{ marginTop: 8, paddingTop: 8, borderTop: "1px solid var(--border)", display: "flex", flexDirection: "column", gap: 4 }}>
                         <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "1px", textTransform: "uppercase", color: "var(--text3)" }}>
