@@ -13,3 +13,7 @@ build/
 screenshots/
 
 reference/
+demo/out/
+demo/clips/
+demo/video/node_modules/
+demo/video/out/
